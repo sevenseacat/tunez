@@ -1,32 +1,18 @@
-<header class="px-4 sm:px-6 lg:px-8">
-  <div class="flex items-center justify-between border-b border-zinc-100 py-3 text-sm">
-    <div class="flex items-center gap-4">
-      <a href="/">
-        <img src={~p"/images/logo.svg"} width="36" />
-      </a>
-      <p class="bg-brand/5 text-brand rounded-full px-2 font-medium leading-6">
-        v<%= Application.spec(:phoenix, :vsn) %>
-      </p>
-    </div>
-    <div class="flex items-center gap-4 font-semibold leading-6 text-zinc-900">
-      <a href="https://twitter.com/elixirphoenix" class="hover:text-zinc-700">
-        @elixirphoenix
-      </a>
-      <a href="https://github.com/phoenixframework/phoenix" class="hover:text-zinc-700">
-        GitHub
-      </a>
-      <a
-        href="https://hexdocs.pm/phoenix/overview.html"
-        class="rounded-lg bg-zinc-100 px-2 py-1 hover:bg-zinc-200/80"
-      >
-        Get Started <span aria-hidden="true">&rarr;</span>
-      </a>
+<div class="flex flex-col w-full max-w-6xl m-auto">
+  <div class="w-full navbar px-4 pb-0">
+    <div class="flex-1 mr-4">
+      <.link navigate={~p"/"}>
+        <.icon name="hero-musical-note-solid" class="w-8 h-8 bg-accent inline-block align-middle" />
+        <span class="text-2xl font-bold text-accent inline-block align-middle mb-1 ml-1">
+          Tunez
+        </span>
+      </.link>
     </div>
   </div>
-</header>
-<main class="px-4 py-20 sm:px-6 lg:px-8">
-  <div class="mx-auto max-w-2xl">
-    <.flash_group flash={@flash} />
+  <div class="divider divider-primary m-0"></div>
+  <div class="px-4">
+    <Flashy.Container.render flash={@flash} />
+
     <%= @inner_content %>
   </div>
-</main>
+</div>

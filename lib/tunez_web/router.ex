@@ -16,6 +16,13 @@ defmodule TunezWeb.Router do
 
   scope "/", TunezWeb do
     pipe_through :browser
+
+    live "/", Artists.IndexLive
+    live "/artists/new", Artists.FormLive, :new
+    live "/artists/:id", Artists.ShowLive
+    live "/artists/:id/edit", Artists.FormLive, :edit
+    live "/artists/:artist_id/albums/new", Albums.FormLive, :new
+    live "/albums/:id/edit", Albums.FormLive, :edit
   end
 
   # Other scopes may use custom stacks.

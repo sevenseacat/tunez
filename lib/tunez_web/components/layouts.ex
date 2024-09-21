@@ -11,4 +11,43 @@ defmodule TunezWeb.Layouts do
   use TunezWeb, :html
 
   embed_templates "layouts/*"
+
+  def user_info(assigns) do
+    ~H"""
+    <div class="space-x-3">
+      <%= if @current_user do %>
+        <.live_component
+          module={TunezWeb.Notifications}
+          id={:notifications}
+          notifications={@notifications}
+        />
+
+        <div class="dropdown dropdown-end">
+          <div tabindex="0" role="button" class="btn btn-link pr-0">
+            <.avatar user={@current_user} />
+          </div>
+          <ul
+            tabindex="0"
+            class="menu menu-sm dropdown-content z-[1] p-2 shadow bg-base-100 rounded-box w-52"
+          >
+            <li class="border-b border-base-200 mb-1 pb-1">
+              <div>
+                <p>Signed in as <strong><%= @current_user.username %></strong></p>
+              </div>
+            </li>
+            <li><.link navigate="/sign-out">Sign out</.link></li>
+          </ul>
+        </div>
+      <% else %>
+        <.button_link navigate="/sign-in" size="xs" type="ghost">
+          Sign In
+        </.button_link>
+        <span>or</span>
+        <.button_link navigate="/register" size="xs" type="ghost">
+          Register
+        </.button_link>
+      <% end %>
+    </div>
+    """
+  end
 end
