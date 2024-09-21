@@ -18,8 +18,7 @@ defmodule TunezWeb.CoreComponents do
   use TunezWeb, :verified_routes
 
   alias Phoenix.LiveView.JS
-  import TunezWeb.Gettext
-
+  use Gettext, backend: TunezWeb.Gettext
   slot :inner_block
 
   def h1(assigns) do

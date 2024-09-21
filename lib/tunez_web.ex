@@ -43,7 +43,7 @@ defmodule TunezWeb do
         layouts: [html: TunezWeb.Layouts]
 
       import Plug.Conn
-      import TunezWeb.Gettext
+      use Gettext, backend: TunezWeb.Gettext
 
       # Add Flash notifications functionality
       import TunezWeb.Components.Flash
@@ -96,7 +96,7 @@ defmodule TunezWeb do
       import Phoenix.HTML
       # Core UI components and translation
       import TunezWeb.CoreComponents
-      import TunezWeb.Gettext
+      use Gettext, backend: TunezWeb.Gettext
 
       # Shortcut for generating JS commands
       alias Phoenix.LiveView.JS
