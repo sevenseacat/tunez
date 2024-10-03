@@ -2,9 +2,13 @@
 
 The starter app for the upcoming Building Web Applications with Ash book.
 
-This app was built using the latest versions of Elixir and Erlang, but will work with any reasonably recent version.
-
 ## Setup
+
+The versions of Elixir and Erlang we're using are specified in the `.tool-versions` file. If you're using `asdf` to manage installed versions of languages, run `asdf install` to install them. Tunez should work with any reasonably recent versions, but newer is better!
+
+You'll also need NodeJS installed for managing JavaScript dependencies - we don't need any specific version, as long as you can run `npm install`, that's okay!
+
+Once you have those installed:
 
 * Run `npm install --prefix assets` to install JavaScript dependencies
 * Run `mix setup` to install and setup Elixir dependencies
