@@ -442,7 +442,7 @@ defmodule TunezWeb.CoreComponents do
   """
   def avatar_url(user) do
     email =
-      to_string(user.username)
+      to_string(user.email)
       |> String.trim()
       |> String.downcase()
 

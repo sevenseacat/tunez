@@ -16,11 +16,7 @@ defmodule TunezWeb.Layouts do
     ~H"""
     <div class="space-x-3">
       <%= if @current_user do %>
-        <.live_component
-          module={TunezWeb.Notifications}
-          id={:notifications}
-          notifications={@notifications}
-        />
+        <.live_component module={TunezWeb.Notifications} id={:notifications} notifications={[]} />
 
         <div class="dropdown dropdown-end">
           <div tabindex="0" role="button" class="btn btn-link pr-0">
@@ -28,13 +24,16 @@ defmodule TunezWeb.Layouts do
           </div>
           <ul
             tabindex="0"
-            class="menu menu-sm dropdown-content z-[1] p-2 shadow bg-base-100 rounded-box w-52"
+            class="menu menu-sm dropdown-content z-[1] p-2 shadow bg-base-100 rounded-box w-fit-content"
           >
             <li class="border-b border-base-200 mb-1 pb-1">
               <div>
-                <p>Signed in as <strong><%= @current_user.username %></strong></p>
+                <p>
+                  Signed in as <strong class="whitespace-nowrap"><%= @current_user.email %></strong>
+                </p>
               </div>
             </li>
+            <li><.link navigate="/settings">Settings</.link></li>
             <li><.link navigate="/sign-out">Sign out</.link></li>
           </ul>
         </div>
