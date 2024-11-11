@@ -45,9 +45,6 @@ defmodule TunezWeb do
       import Plug.Conn
       use Gettext, backend: TunezWeb.Gettext
 
-      # Add Flash notifications functionality
-      import TunezWeb.Components.Flash
-
       unquote(verified_routes())
     end
   end
@@ -100,9 +97,6 @@ defmodule TunezWeb do
 
       # Shortcut for generating JS commands
       alias Phoenix.LiveView.JS
-
-      # Add Flash notifications functionality
-      import TunezWeb.Components.Flash
 
       # Routes generation with the ~p sigil
       unquote(verified_routes())

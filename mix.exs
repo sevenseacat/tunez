@@ -60,8 +60,7 @@ defmodule Tunez.MixProject do
       {:gettext, "~> 0.26 and >= 0.26.1"},
       {:jason, "~> 1.2"},
       {:dns_cluster, "~> 0.1.1"},
-      {:bandit, "~> 1.5"},
-      {:flashy, "~> 0.2"}
+      {:bandit, "~> 1.5"}
     ]
   end
 

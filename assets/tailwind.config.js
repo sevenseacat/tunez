@@ -10,8 +10,7 @@ module.exports = {
   content: [
     "./js/**/*.js",
     "../lib/tunez_web.ex",
-    "../lib/tunez_web/**/*.*ex",
-    "../deps/flashy/**/*.*ex"
+    "../lib/tunez_web/**/*.*ex"
   ],
   theme: {
     extend: {
