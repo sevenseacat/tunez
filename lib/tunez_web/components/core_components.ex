@@ -33,7 +33,7 @@ defmodule TunezWeb.CoreComponents do
   attr :title, :string, default: nil
 
   attr :kind, :atom,
-    values: [:success, :warning, :info, :error],
+    values: [:warning, :info, :error],
     doc: "used for styling and flash lookup"
 
   attr :rest, :global, doc: "the arbitrary HTML attributes to add to the flash container"
@@ -52,17 +52,15 @@ defmodule TunezWeb.CoreComponents do
       class={[
         "flash-#{@kind}",
         "w-80 sm:w-96 shadow-lg mb-2 border-0 border-l-4 bg-base-100 cursor-pointer rounded-box p-4",
-        @kind == :success && "border-success",
+        @kind == :info && "border-success",
         @kind == :error && "border-error",
-        @kind == :info && "border-info",
         @kind == :warning && "border-warning"
       ]}
       {@rest}
     >
       <div class="grid grid-flow-cols grid-cols-[auto_minmax(auto,1fr)] justify-items-start text-start gap-2 items-center">
-        <.icon :if={@kind == :info} name="hero-information-circle-mini" class="w-6 h-6 text-info" />
         <.icon :if={@kind == :error} name="hero-exclamation-circle-mini" class="w-6 h-6 text-error" />
-        <.icon :if={@kind == :success} name="hero-check-circle-mini" class="w-6 h-6 text-success" />
+        <.icon :if={@kind == :info} name="hero-check-circle-mini" class="w-6 h-6 text-success" />
         <.icon
           :if={@kind == :warning}
           name="hero-exclamation-circle-mini"
@@ -95,7 +93,6 @@ defmodule TunezWeb.CoreComponents do
     <div id={@id} class="fixed top-4 right-4 space-y-2 z-50">
       <.flash kind={:info} flash={@flash} />
       <.flash kind={:error} flash={@flash} />
-      <.flash kind={:success} flash={@flash} />
       <.flash kind={:warning} flash={@flash} />
       <.flash
         id="client-error"
