@@ -33,7 +33,6 @@ defmodule TunezWeb.Layouts do
                 </p>
               </div>
             </li>
-            <li><.link navigate="/settings">Settings</.link></li>
             <li><.link navigate="/sign-out">Sign out</.link></li>
           </ul>
         </div>
