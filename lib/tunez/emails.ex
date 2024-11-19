@@ -24,7 +24,7 @@ defmodule Tunez.Emails do
 
   def deliver_password_reset_email(user, url) do
     if !url do
-      raise "Cannot deliver confirmation instructions without a url"
+      raise "Cannot deliver password reset instructions without a url"
     end
 
     deliver(user.email, "Reset your password", """
