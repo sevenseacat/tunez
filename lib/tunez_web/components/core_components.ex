@@ -528,31 +528,27 @@ defmodule TunezWeb.CoreComponents do
   attr :class, :string, default: ""
 
   def avatar(assigns) do
-    assigns = assign(assigns, :avatar_url, avatar_url(assigns.user))
+    assigns = assign(assigns, :seed, avatar_seed(assigns.user))
 
     ~H"""
-    <div class={["avatar", @class]}>
-      <div class="w-8 h-8 rounded-full">
-        <img src={@avatar_url} />
-      </div>
+    <div
+      class={["mask mask-circle size-8", @class]}
+      phx-hook="avatar"
+      id={"avatar_#{@seed}"}
+      data-seed={@seed}
+    >
     </div>
     """
   end
 
-  @doc """
-  Use a self-hosted version of the Dicebear API, for generating avatars.
-  """
-  def avatar_url(user) do
+  def avatar_seed(user) do
     email =
       to_string(user.email)
       |> String.trim()
       |> String.downcase()
 
-    hash =
-      :crypto.hash(:sha256, email)
-      |> Base.encode16(case: :lower)
-
-    "http://tunez-avatars.fly.dev/7.x/shapes/svg?seed=#{hash}"
+    :crypto.hash(:sha256, email)
+    |> Base.encode16(case: :lower)
   end
 
   def time_ago_in_words(datetime) do
