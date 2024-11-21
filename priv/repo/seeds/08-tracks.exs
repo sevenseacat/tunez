@@ -20,6 +20,7 @@ Tunez.Music.Track
 
 # And re-insert fresh copies of them
 Tunez.Seeder.albums()
+|> Enum.filter(fn album -> Map.has_key?(album_name_map, album.name) end)
 |> Enum.flat_map(fn album ->
   album.tracks
   |> Enum.with_index(1)
