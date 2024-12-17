@@ -73,7 +73,7 @@ defmodule Tunez.MixProject do
   defp aliases do
     [
       setup: ["deps.get", "ecto.setup", "assets.setup", "assets.build"],
-      "ecto.setup": ["ecto.create", "ecto.migrate", "seed"],
+      "ecto.setup": ["ecto.create", "ecto.migrate"],
       seed: [
         "run priv/repo/seeds/01-artists.exs",
         "run priv/repo/seeds/02-albums.exs",
