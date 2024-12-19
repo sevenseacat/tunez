@@ -32,8 +32,8 @@ defmodule TunezWeb.Notifications do
         >
           <div>
             <p>
-              The album <span class="font-bold"><%= notification.album.name %></span>
-              has been added for <%= notification.album.artist.name %>
+              The album <span class="font-bold">{notification.album.name}</span>
+              has been added for {notification.album.artist.name}
             </p>
             <div class="h-16 w-16">
               <.cover_image image={notification.album.cover_image_url} />

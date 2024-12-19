@@ -62,7 +62,7 @@ defmodule TunezWeb.Artists.IndexLive do
         class="text-lg font-semibold"
         data-role="artist-name"
       >
-        <%= @artist.name %>
+        {@artist.name}
       </.link>
     </p>
     """
@@ -73,8 +73,8 @@ defmodule TunezWeb.Artists.IndexLive do
   def artist_card_album_info(assigns) do
     ~H"""
     <span class="mt-2 text-sm leading-6 text-zinc-500">
-      <%= @artist.album_count %> <%= ngettext("album", "albums", @artist.album_count) %>,
-      latest release <%= @artist.latest_album_year_released %>
+      {@artist.album_count} {ngettext("album", "albums", @artist.album_count)},
+      latest release {@artist.latest_album_year_released}
     </span>
     """
   end
@@ -105,7 +105,7 @@ defmodule TunezWeb.Artists.IndexLive do
         name="query"
         value={@query}
       />
-      <%= render_slot(@inner_block) %>
+      {render_slot(@inner_block)}
     </form>
     """
   end
@@ -122,7 +122,7 @@ defmodule TunezWeb.Artists.IndexLive do
           value={value}
           {if @selected == value, do: [selected: true], else: []}
         >
-          <%= text %>
+          {text}
         </option>
       </select>
     </form>

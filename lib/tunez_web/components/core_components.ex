@@ -67,8 +67,8 @@ defmodule TunezWeb.CoreComponents do
           class="w-6 h-6 text-warning"
         />
         <div>
-          <p :if={@title} class="font-semibold text-sm"><%= @title %></p>
-          <p class="text-sm"><%= msg %></p>
+          <p :if={@title} class="font-semibold text-sm">{@title}</p>
+          <p class="text-sm">{msg}</p>
         </div>
         <button type="button" class="group absolute top-1 right-1 p-2" aria-label={gettext("close")}>
           <.icon name="hero-x-mark-solid" class="h-5 w-5 opacity-40 group-hover:opacity-70" />
@@ -102,7 +102,7 @@ defmodule TunezWeb.CoreComponents do
         phx-connected={hide("#client-error")}
         hidden
       >
-        <%= gettext("Attempting to reconnect") %>
+        {gettext("Attempting to reconnect")}
         <.icon name="hero-arrow-path" class="ml-1 h-3 w-3 animate-spin" />
       </.flash>
 
@@ -114,7 +114,7 @@ defmodule TunezWeb.CoreComponents do
         phx-connected={hide("#server-error")}
         hidden
       >
-        <%= gettext("Hang in there while we get back on track") %>
+        {gettext("Hang in there while we get back on track")}
         <.icon name="hero-arrow-path" class="ml-1 h-3 w-3 animate-spin" />
       </.flash>
     </div>
@@ -126,7 +126,7 @@ defmodule TunezWeb.CoreComponents do
   def h1(assigns) do
     ~H"""
     <h1 class="text-3xl font-semibold leading-8 py-2">
-      <%= render_slot(@inner_block) %>
+      {render_slot(@inner_block)}
     </h1>
     """
   end
@@ -136,7 +136,7 @@ defmodule TunezWeb.CoreComponents do
   def h2(assigns) do
     ~H"""
     <h2 class="text-xl font-semibold">
-      <%= render_slot(@inner_block) %>
+      {render_slot(@inner_block)}
     </h2>
     """
   end
@@ -189,7 +189,7 @@ defmodule TunezWeb.CoreComponents do
       ]}
       {@rest}
     >
-      <%= render_slot(@inner_block) %>
+      {render_slot(@inner_block)}
     </.link>
     """
   end
@@ -221,9 +221,9 @@ defmodule TunezWeb.CoreComponents do
     ~H"""
     <.form :let={f} for={@for} as={@as} {@rest}>
       <div class="space-y-8">
-        <%= render_slot(@inner_block, f) %>
+        {render_slot(@inner_block, f)}
         <div :for={action <- @actions} class="mt-2 flex items-center justify-between gap-6">
-          <%= render_slot(action, f) %>
+          {render_slot(action, f)}
         </div>
       </div>
     </.form>
@@ -257,7 +257,7 @@ defmodule TunezWeb.CoreComponents do
       ]}
       {@rest}
     >
-      <%= render_slot(@inner_block) %>
+      {render_slot(@inner_block)}
     </button>
     """
   end
@@ -341,9 +341,9 @@ defmodule TunezWeb.CoreComponents do
           class="rounded border-zinc-300 text-zinc-900 focus:ring-0"
           {@rest}
         />
-        <%= @label %>
+        {@label}
       </label>
-      <.error :for={msg <- @errors}><%= msg %></.error>
+      <.error :for={msg <- @errors}>{msg}</.error>
     </.form_control>
     """
   end
@@ -351,7 +351,7 @@ defmodule TunezWeb.CoreComponents do
   def input(%{type: "select"} = assigns) do
     ~H"""
     <.form_control errors={@errors}>
-      <.label :if={@label} for={@id}><%= @label %></.label>
+      <.label :if={@label} for={@id}>{@label}</.label>
       <select
         id={@id}
         name={@name}
@@ -359,10 +359,10 @@ defmodule TunezWeb.CoreComponents do
         multiple={@multiple}
         {@rest}
       >
-        <option :if={@prompt} value=""><%= @prompt %></option>
-        <%= Phoenix.HTML.Form.options_for_select(@options, @value) %>
+        <option :if={@prompt} value="">{@prompt}</option>
+        {Phoenix.HTML.Form.options_for_select(@options, @value)}
       </select>
-      <.error :for={msg <- @errors}><%= msg %></.error>
+      <.error :for={msg <- @errors}>{msg}</.error>
     </.form_control>
     """
   end
@@ -370,14 +370,14 @@ defmodule TunezWeb.CoreComponents do
   def input(%{type: "textarea"} = assigns) do
     ~H"""
     <.form_control errors={@errors}>
-      <.label :if={@label} for={@id}><%= @label %></.label>
+      <.label :if={@label} for={@id}>{@label}</.label>
       <textarea
         id={@id}
         name={@name}
         class="textarea textarea-bordered min-h-[6rem] error:textarea-error"
         {@rest}
       ><%= Phoenix.HTML.Form.normalize_value("textarea", @value) %></textarea>
-      <.error :for={msg <- @errors}><%= msg %></.error>
+      <.error :for={msg <- @errors}>{msg}</.error>
     </.form_control>
     """
   end
@@ -386,7 +386,7 @@ defmodule TunezWeb.CoreComponents do
   def input(assigns) do
     ~H"""
     <.form_control errors={@errors}>
-      <.label :if={@label} for={@id}><%= @label %></.label>
+      <.label :if={@label} for={@id}>{@label}</.label>
       <input
         type={@type}
         name={@name}
@@ -396,7 +396,7 @@ defmodule TunezWeb.CoreComponents do
         phx-debounce="250"
         {@rest}
       />
-      <.error :for={msg <- @errors}><%= msg %></.error>
+      <.error :for={msg <- @errors}>{msg}</.error>
     </.form_control>
     """
   end
@@ -407,7 +407,7 @@ defmodule TunezWeb.CoreComponents do
   def form_control(assigns) do
     ~H"""
     <div class={["form-control", @errors != [] && "error"]}>
-      <%= render_slot(@inner_block) %>
+      {render_slot(@inner_block)}
     </div>
     """
   end
@@ -421,7 +421,7 @@ defmodule TunezWeb.CoreComponents do
   def label(assigns) do
     ~H"""
     <label for={@for} class="block label cursor-pointer error:text-error">
-      <%= render_slot(@inner_block) %>
+      {render_slot(@inner_block)}
     </label>
     """
   end
@@ -435,7 +435,7 @@ defmodule TunezWeb.CoreComponents do
     ~H"""
     <p class="mt-2 flex gap-2 text-sm leading-6 text-error">
       <.icon name="hero-exclamation-circle-mini" class="mt-0.5 h-5 w-5 flex-none" />
-      <%= render_slot(@inner_block) %>
+      {render_slot(@inner_block)}
     </p>
     """
   end
@@ -461,9 +461,9 @@ defmodule TunezWeb.CoreComponents do
       "my-6"
     ]}>
       <div>
-        <%= render_slot(@inner_block) %>
+        {render_slot(@inner_block)}
         <p :if={@subtitle != []} class="mt-2 text-sm leading-6 text-zinc-600">
-          <%= render_slot(@subtitle) %>
+          {render_slot(@subtitle)}
         </p>
       </div>
       <div
@@ -490,7 +490,7 @@ defmodule TunezWeb.CoreComponents do
                max-sm:p-2 max-sm:shadow max-sm:bg-base-100 max-sm:rounded-box max-sm:w-52 sm:space-x-4"
           ]}
         >
-          <%= render_slot(@action) %>
+          {render_slot(@action)}
         </div>
       </div>
     </header>

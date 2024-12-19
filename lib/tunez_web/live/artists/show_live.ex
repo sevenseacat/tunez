@@ -36,7 +36,7 @@ defmodule TunezWeb.Artists.ShowLive do
     ~H"""
     <.header>
       <.h1>
-        <%= @artist.name %>
+        {@artist.name}
       </.h1>
       <:action>
         <.button_link
@@ -54,7 +54,7 @@ defmodule TunezWeb.Artists.ShowLive do
         </.button_link>
       </:action>
     </.header>
-    <div class="mb-6"><%= formatted(@artist.biography) %></div>
+    <div class="mb-6">{formatted(@artist.biography)}</div>
 
     <.button_link navigate={~p"/artists/#{@artist.id}/albums/new"} kind="primary">
       New Album
@@ -77,7 +77,7 @@ defmodule TunezWeb.Artists.ShowLive do
       <div class="flex-1">
         <.header class="pl-4 pr-2 !m-0">
           <.h2>
-            <%= @album.name %> (<%= @album.year_released %>)
+            {@album.name} ({@album.year_released})
           </.h2>
           <:action>
             <.button_link
@@ -108,10 +108,10 @@ defmodule TunezWeb.Artists.ShowLive do
     <table :if={@tracks != []} class="table table-md w-full mt-2 -z-10">
       <tr :for={track <- @tracks}>
         <th class="whitespace-nowrap w-1">
-          <%= String.pad_leading("#{track.number}", 2, "0") %>.
+          {String.pad_leading("#{track.number}", 2, "0")}.
         </th>
-        <td><%= track.name %></td>
-        <td class="whitespace-nowrap w-1 text-right"><%= track.duration %></td>
+        <td>{track.name}</td>
+        <td class="whitespace-nowrap w-1 text-right">{track.duration}</td>
       </tr>
     </table>
     <div :if={@tracks == []} class="p-8 text-center italic text-base-content/40">
@@ -153,7 +153,7 @@ defmodule TunezWeb.Artists.ShowLive do
     ~H"""
     <div class="italic text-xs text-slate-500 my-5">
       Last updated by:
-      <.user_with_avatar user={@record.updated_by} />, <%= time_ago_in_words(@record.updated_at) %>
+      <.user_with_avatar user={@record.updated_by} />, {time_ago_in_words(@record.updated_at)}
     </div>
     """
   end
@@ -161,7 +161,7 @@ defmodule TunezWeb.Artists.ShowLive do
   def user_with_avatar(%{user: %{username: _}} = assigns) do
     ~H"""
     <.avatar user={@user} class="align-middle" />
-    <strong><%= @user.username %></strong>
+    <strong>{@user.username}</strong>
     """
   end
 

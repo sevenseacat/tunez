@@ -15,7 +15,7 @@ defmodule TunezWeb.Artists.FormLive do
   def render(assigns) do
     ~H"""
     <.header>
-      <.h1><%= @page_title %></.h1>
+      <.h1>{@page_title}</.h1>
     </.header>
 
     <.simple_form

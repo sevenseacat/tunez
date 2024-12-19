@@ -29,7 +29,7 @@ defmodule TunezWeb.Layouts do
             <li class="border-b border-base-200 mb-1 pb-1">
               <div>
                 <p>
-                  Signed in as <strong class="whitespace-nowrap"><%= @current_user.email %></strong>
+                  Signed in as <strong class="whitespace-nowrap">{@current_user.email}</strong>
                 </p>
               </div>
             </li>
