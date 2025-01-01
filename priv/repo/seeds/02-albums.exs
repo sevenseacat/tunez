@@ -22,7 +22,8 @@ Tunez.Music.Album
 Tunez.Seeder.albums()
 |> Enum.map(fn album ->
   album
-  |> Map.put(:artist_id, Map.fetch!(artist_name_map, album.artist_name))
+  |> Map.put(:artist_id, Map.get(artist_name_map, album.artist_name))
   |> Map.drop([:artist_name, :tracks])
 end)
+|> Enum.filter(& &1.artist_id)
 |> Ash.bulk_create!(Tunez.Music.Album, :create, return_errors?: true, authorize?: false)
