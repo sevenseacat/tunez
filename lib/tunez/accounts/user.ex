@@ -61,6 +61,10 @@ defmodule Tunez.Accounts.User do
   actions do
     defaults [:read]
 
+    update :set_role do
+      accept [:role]
+    end
+
     read :get_by_subject do
       description "Get a user by the subject claim in a JWT"
       argument :subject, :string, allow_nil?: false
@@ -266,6 +270,10 @@ defmodule Tunez.Accounts.User do
     policy action([:register_with_password, :sign_in_with_password]) do
       authorize_if always()
     end
+
+    policy action(:read) do
+      authorize_if expr(id == ^actor(:id))
+    end
   end
 
   attributes do
@@ -279,6 +287,11 @@ defmodule Tunez.Accounts.User do
     attribute :hashed_password, :string do
       allow_nil? true
       sensitive? true
+    end
+
+    attribute :role, Tunez.Accounts.Role do
+      allow_nil? false
+      default :user
     end
   end
 
