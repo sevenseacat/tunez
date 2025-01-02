@@ -17,7 +17,8 @@ defmodule Tunez.Application do
       # Start a worker by calling: Tunez.Worker.start_link(arg)
       # {Tunez.Worker, arg},
       # Start to serve requests, typically the last entry
-      TunezWeb.Endpoint
+      TunezWeb.Endpoint,
+      {AshAuthentication.Supervisor, [otp_app: :tunez]}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
