@@ -1,5 +1,24 @@
 defmodule Tunez.Music do
-  use Ash.Domain, extensions: [AshPhoenix]
+  use Ash.Domain, extensions: [AshJsonApi.Domain, AshPhoenix]
+
+  json_api do
+    routes do
+      base_route "/artists", Tunez.Music.Artist do
+        get :read
+        index :search
+        post :create
+        patch :update
+        delete :destroy
+        related :albums, :read, primary?: true
+      end
+
+      base_route "/albums", Tunez.Music.Album do
+        post :create
+        patch :update
+        delete :destroy
+      end
+    end
+  end
 
   resources do
     resource Tunez.Music.Artist do
