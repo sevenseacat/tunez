@@ -4,7 +4,7 @@ defmodule Tunez.Repo do
 
   def installed_extensions do
     # Add extensions here, and the migration generator will install them.
-    ["ash-functions", "pg_trgm"]
+    ["ash-functions", "pg_trgm", "citext"]
   end
 
   # Don't open unnecessary transactions

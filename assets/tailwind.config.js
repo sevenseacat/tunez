@@ -10,7 +10,8 @@ module.exports = {
   content: [
     "./js/**/*.js",
     "../lib/tunez_web.ex",
-    "../lib/tunez_web/**/*.*ex"
+    "../lib/tunez_web/**/*.*ex",
+    "../deps/ash_authentication_phoenix/**/*.*ex"
   ],
   theme: {
     extend: {
