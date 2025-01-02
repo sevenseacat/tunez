@@ -85,3 +85,4 @@ config :phoenix_live_view,
 config :swoosh, :api_client, false
 
 config :ash_authentication, debug_authentication_failures?: true
+config :ash, :policies, show_policy_breakdowns?: true
