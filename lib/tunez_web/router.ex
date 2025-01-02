@@ -1,6 +1,10 @@
 defmodule TunezWeb.Router do
   use TunezWeb, :router
 
+  pipeline :graphql do
+    plug AshGraphql.Plug
+  end
+
   pipeline :browser do
     plug :accepts, ["html"]
     plug :fetch_session
@@ -12,6 +16,19 @@ defmodule TunezWeb.Router do
 
   pipeline :api do
     plug :accepts, ["json"]
+  end
+
+  scope "/gql" do
+    pipe_through [:graphql]
+
+    forward "/playground",
+            Absinthe.Plug.GraphiQL,
+            schema: Module.concat(["TunezWeb.GraphqlSchema"]),
+            interface: :playground
+
+    forward "/",
+            Absinthe.Plug,
+            schema: Module.concat(["TunezWeb.GraphqlSchema"])
   end
 
   scope "/api/json" do
