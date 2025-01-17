@@ -100,9 +100,11 @@ defmodule TunezWeb.Artists.IndexLive do
     ~H"""
     <form class="relative w-fit inline-block" {@rest}>
       <.icon name="hero-magnifying-glass" class="w-4 h-4 m-2 ml-3 absolute bg-base-content/50" />
+      <label for="search-text" class="hidden">Search</label>
       <input
         class="input input-bordered rounded-full input-sm pl-8 w-32 sm:w-48"
         name="query"
+        id="search-text"
         value={@query}
       />
       {render_slot(@inner_block)}
@@ -116,7 +118,7 @@ defmodule TunezWeb.Artists.IndexLive do
     ~H"""
     <form data-role="artist-sort" class="hidden sm:inline" phx-change="change_sort">
       <label for="sort_by" class="text-sm">sort by:</label>
-      <select class="select select-bordered select-sm py-0 w-fit" name="sort_by">
+      <select class="select select-bordered select-sm py-0 w-fit" name="sort_by" id="sort_by">
         <option
           :for={{value, text} <- @options}
           value={value}

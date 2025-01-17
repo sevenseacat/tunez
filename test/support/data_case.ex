@@ -23,7 +23,10 @@ defmodule Tunez.DataCase do
       import Ecto
       import Ecto.Changeset
       import Ecto.Query
+      import Ash.Test
       import Tunez.DataCase
+      import Tunez.Generator
+      import Tunez.Support.Helpers
     end
   end
 

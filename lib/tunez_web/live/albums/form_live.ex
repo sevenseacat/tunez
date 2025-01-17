@@ -56,14 +56,17 @@ defmodule TunezWeb.Albums.FormLive do
       </thead>
       <tbody>
         <.inputs_for :let={track_form} field={@form[:tracks]}>
-          <tr>
+          <tr data-role={"track-#{track_form.index}"}>
             <td class="align-top px-0 w-20">
+              <label for={track_form[:number].id} class="hidden">Number</label>
               <.input field={track_form[:number]} type="number" />
             </td>
             <td class="align-top">
+              <label for={track_form[:name].id} class="hidden">Name</label>
               <.input field={track_form[:name]} />
             </td>
             <td class="align-top px-0 w-24">
+              <label for={track_form[:duration].id} class="hidden">Duration</label>
               <.input field={track_form[:duration]} />
             </td>
             <td class="align-top w-12 pt-5">
