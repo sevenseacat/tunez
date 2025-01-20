@@ -65,13 +65,13 @@ defmodule Tunez.Seeder do
         """
       },
       %{
-        name: "L'Orchestre Obscure",
+        name: "L'orchestre obscur",
         biography: """
-        L'Orchestre Obscure, based in Paris, France, is an ensemble unlike any other, blending the haunting beauty of neoclassical music with the deep, unsettling tones of dark ambient. Formed in 2012, the group consists of classically trained musicians who share a passion for exploring the shadowy realms of sound and emotion.
+        L'orchestre obscur, based in Paris, France, is an ensemble unlike any other, blending the haunting beauty of neoclassical music with the deep, unsettling tones of dark ambient. Formed in 2012, the group consists of classically trained musicians who share a passion for exploring the shadowy realms of sound and emotion.
 
         Their music serves as a soundtrack for the unspoken, the unseen, and the unknown, weaving together elements of classical orchestration, electronic textures, and ambient noise. The result is a profound auditory experience that invites listeners into a world of introspection and melancholy, yet is also filled with the stark beauty of minimalist composition.
 
-        L'Orchestre Obscure performances are visual and auditory feasts, often accompanied by dim lighting and abstract visual projections, enhancing the mystique and immersive nature of their live shows. Their music is both an escape and a deep dive into the complexities of human emotions and the darker corners of the classical music world.
+        L'orchestre obscur performances are visual and auditory feasts, often accompanied by dim lighting and abstract visual projections, enhancing the mystique and immersive nature of their live shows. Their music is both an escape and a deep dive into the complexities of human emotions and the darker corners of the classical music world.
         """
       },
       %{
@@ -1188,9 +1188,9 @@ defmodule Tunez.Seeder do
       },
       %{
         name: "Voiles de l'ombre",
-        artist_name: "L'Orchestre Obscure",
+        artist_name: "L'orchestre obscur",
         year_released: 2018,
-        cover_image_url: "/images/albums/lorchestre_obscure_voiles_de_lombre.png",
+        cover_image_url: "/images/albums/lorchestre_obscur_voiles_de_lombre.png",
         tracks: [
           %{name: "Murmures de la forêt", duration: "6:10"},
           %{name: "Crépuscule des âmes", duration: "5:45"},
