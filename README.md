@@ -11,6 +11,7 @@ You'll also need NodeJS installed for managing JavaScript dependencies - we don'
 Once you have those installed:
 
 * Run `npm install --prefix assets` to install JavaScript dependencies
+* Edit `config/dev.exs` and set up the Postgres username and password fr your local installation
 * Run `mix setup` to install and setup Elixir dependencies
 * Start Phoenix endpoint with `mix phx.server` or inside IEx with `iex -S mix phx.server`
 
