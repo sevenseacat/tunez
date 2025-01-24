@@ -13,7 +13,6 @@ defmodule Tunez.Generator do
     Defaults to `:editor`.
 
   - `:artist_id` - Specify the artist ID for the album.
-  - `:track_count` - The number of tracks to generate for the album.
   """
   def album(opts \\ []) do
     raise "Uncomment the `album` generator content in `test/support/generator.ex` (and remove this line)"
@@ -29,14 +28,6 @@ defmodule Tunez.Generator do
     #       generate(artist()).id
     #     end)
 
-    # after_action =
-    #   if opts[:track_count] do
-    #     fn album ->
-    #       generate_many(track(album_id: album.id), opts[:track_count])
-    #       Ash.load!(album, :tracks)
-    #     end
-    #   end
-
     # if opts[:seed?] do
     #   seed_generator(
     #     %Tunez.Music.Album{
@@ -45,8 +36,7 @@ defmodule Tunez.Generator do
     #       artist_id: artist_id
     #     },
     #     actor: actor,
-    #     overrides: opts,
-    #     after_action: after_action
+    #     overrides: opts
     #   )
     # else
     #   changeset_generator(
@@ -59,8 +49,7 @@ defmodule Tunez.Generator do
     #       cover_image_url: nil
     #     ],
     #     overrides: opts,
-    #     actor: actor,
-    #     after_action: after_action
+    #     actor: actor
     #   )
     # end
   end
