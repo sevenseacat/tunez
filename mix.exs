@@ -33,7 +33,6 @@ defmodule Tunez.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
-      {:igniter, "~> 0.3"},
       {:phoenix, "~> 1.7.14"},
       {:phoenix_ecto, "~> 4.5"},
       {:ecto_sql, "~> 3.10"},
@@ -60,6 +59,7 @@ defmodule Tunez.MixProject do
       {:jason, "~> 1.2"},
       {:dns_cluster, "~> 0.1.1"},
       {:bandit, "~> 1.5"},
+      {:igniter, "~> 0.3", only: [:dev]},
       {:phoenix_test, "~> 0.5.1", only: :test, runtime: false}
     ]
   end
