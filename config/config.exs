@@ -25,6 +25,7 @@ config :spark,
     remove_parens?: true,
     "Ash.Resource": [
       section_order: [
+        :graphql,
         :json_api,
         :postgres,
         :resource,
@@ -44,7 +45,15 @@ config :spark,
       ]
     ],
     "Ash.Domain": [
-      section_order: [:json_api, :resources, :policies, :authorization, :domain, :execution]
+      section_order: [
+        :graphql,
+        :json_api,
+        :resources,
+        :policies,
+        :authorization,
+        :domain,
+        :execution
+      ]
     ]
   ]
 
