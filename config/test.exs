@@ -1,4 +1,5 @@
 import Config
+config :tunez, token_signing_secret: "/Qex3F3hR2OAG/aEx0XqCW2hBVlbs+jJ"
 config :ash, disable_async?: true
 
 # Configure your database
