@@ -531,13 +531,10 @@ defmodule TunezWeb.CoreComponents do
     assigns = assign(assigns, :seed, avatar_seed(assigns.user))
 
     ~H"""
-    <div
+    <img
       class={["mask mask-circle size-8", @class]}
-      phx-hook="avatar"
-      id={"avatar_#{@seed}"}
-      data-seed={@seed}
-    >
-    </div>
+      src={"https://api.dicebear.com/9.x/shapes/svg?seed=#{@seed}"}
+    />
     """
   end
 

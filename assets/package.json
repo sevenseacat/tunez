@@ -1,7 +1,5 @@
 {
   "dependencies": {
-    "@dicebear/core": "^9.2.2",
-    "@dicebear/shapes": "^9.2.2",
     "daisyui": "^4.12.10"
   }
 }
