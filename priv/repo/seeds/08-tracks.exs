@@ -23,11 +23,11 @@ Tunez.Seeder.albums()
 |> Enum.filter(fn album -> Map.has_key?(album_name_map, album.name) end)
 |> Enum.flat_map(fn album ->
   album.tracks
-  |> Enum.with_index(1)
-  |> Enum.map(fn {track, number} ->
+  |> Enum.with_index()
+  |> Enum.map(fn {track, order} ->
     track
     |> Map.put(:album_id, Map.fetch!(album_name_map, album.name))
-    |> Map.put(:number, number)
+    |> Map.put(:order, order)
   end)
 end)
-|> Ash.bulk_create!(Tunez.Music.Track, :create, return_errors?: true, authorize?: false)
+|> Ash.bulk_create!(Tunez.Music.Track, :create, skip_unknown_inputs: [:*], return_errors?: true, authorize?: false)

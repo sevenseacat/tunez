@@ -132,20 +132,30 @@ defmodule Tunez.Generator do
     # actor = opts[:actor] || once(:default_actor, fn -> generate(user(role: :admin)) end)
     # album_id = opts[:album_id] || once(:default_album_id, fn -> generate(album()).id end)
 
-    # changeset_generator(
-    #   Tunez.Music.Track,
-    #   :create,
-    #   defaults: [
-    #     album_id: album_id,
-    #     number: sequence(:track_number, &(&1 + 1)),
-    #     duration:
-    #       StreamData.repeatedly(fn ->
-    #         "#{Enum.random(1..20)}:#{Enum.random(0..5)}#{Enum.random(0..9)}"
-    #       end)
-    #   ],
-    #   overrides: opts,
-    #   actor: actor
-    # )
+    # if opts[:seed?] do
+    #   seed_generator(
+    #     %Tunez.Music.Track{
+    #       album_id: album_id,
+    #       order: sequence(:track_number, & &1),
+    #       name: sequence(:track_name, &"Track #{&1}"),
+    #       duration_seconds: Enum.at(Ash.Type.generator(:integer, min: 1, max: 1000), 0)
+    #     },
+    #     actor: actor,
+    #     overrides: opts
+    #   )
+    # else
+    #   changeset_generator(
+    #     Tunez.Music.Track,
+    #     :create,
+    #     defaults: [
+    #       album_id: album_id,
+    #       number: sequence(:track_number, &(&1 + 1)),
+    #       duration: duration()
+    #     ],
+    #     overrides: opts,
+    #     actor: actor
+    #   )
+    # end
   end
 
   @doc """
@@ -173,5 +183,16 @@ defmodule Tunez.Generator do
     #     Tunez.Accounts.set_user_role!(user, role, authorize?: false)
     #   end
     # )
+  end
+
+  def track_input(_opts \\ []) do
+    raise "Uncomment the `track_input` generator content in `test/support/generator.ex` (and remove this line)"
+    # action_input(Tunez.Music.Track, :create, %{duration: duration()})
+  end
+
+  def duration do
+    StreamData.repeatedly(fn ->
+      "#{Enum.random(1..20)}:#{Enum.random(0..5)}#{Enum.random(0..9)}"
+    end)
   end
 end

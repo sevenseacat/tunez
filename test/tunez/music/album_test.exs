@@ -110,15 +110,15 @@ defmodule TunezWeb.Music.AlbumTest do
   end
 
   describe "policies" do
-    def setup_users do
-      %{
-        admin: generate(user(role: :admin)),
-        editor: generate(user(role: :editor)),
-        user: generate(user(role: :user))
-      }
-    end
+    # def setup_users do
+    #   %{
+    #     admin: generate(user(role: :admin)),
+    #     editor: generate(user(role: :editor)),
+    #     user: generate(user(role: :user))
+    #   }
+    # end
 
-    @tag :skip
+    @tag skip: "Also uncomment the `setup_users` function above"
     test "admins and editors can create new albums" do
       # users = setup_users()
       # assert Music.can_create_album?(users.admin)
@@ -127,7 +127,7 @@ defmodule TunezWeb.Music.AlbumTest do
       # refute Music.can_create_album?(nil)
     end
 
-    @tag :skip
+    @tag skip: "Also uncomment the `setup_users` function above"
     test "admins can delete albums" do
       # users = setup_users()
       # album = generate(album())
@@ -137,7 +137,7 @@ defmodule TunezWeb.Music.AlbumTest do
       # refute Music.can_destroy_album?(nil, album)
     end
 
-    @tag :skip
+    @tag skip: "Also uncomment the `setup_users` function above"
     test "admins can update albums" do
       # users = setup_users()
       # album = generate(album())
@@ -147,7 +147,7 @@ defmodule TunezWeb.Music.AlbumTest do
       # refute Music.can_update_album?(nil, album)
     end
 
-    @tag :skip
+    @tag skip: "Also uncomment the `setup_users` function above"
     test "editors can edit albums that they created" do
       # users = setup_users()
       # can_edit = generate(album(seed?: true, created_by: users.editor))
@@ -157,7 +157,7 @@ defmodule TunezWeb.Music.AlbumTest do
       # refute Music.can_update_album?(users.editor, cant_edit)
     end
 
-    @tag :skip
+    @tag skip: "Also uncomment the `setup_users` function above"
     test "editors can delete albums that they created" do
       # users = setup_users()
       # can_delete = generate(album(seed?: true, created_by: users.editor))

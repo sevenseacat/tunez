@@ -105,6 +105,7 @@ defmodule TunezWeb.Artists.IndexLive do
         class="input input-bordered rounded-full input-sm pl-8 w-32 sm:w-48"
         name="query"
         id="search-text"
+        placeholder="search artists by name"
         value={@query}
       />
       {render_slot(@inner_block)}

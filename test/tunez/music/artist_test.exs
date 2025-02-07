@@ -3,6 +3,13 @@ defmodule Tunez.Music.ArtistTest do
 
   alias Tunez.Music, warn: false
 
+  describe "Tunez.Music.read_artists!/0-2" do
+    @tag :skip
+    test "when there is no data, nothing is returned" do
+      # assert Music.read_artists!() == []
+    end
+  end
+
   describe "Tunez.Music.search_artists/1-2" do
     def names(page), do: Enum.map(page.results, & &1.name)
 
@@ -220,15 +227,15 @@ defmodule Tunez.Music.ArtistTest do
   end
 
   describe "policies" do
-    def setup_users do
-      %{
-        admin: generate(user(role: :admin)),
-        editor: generate(user(role: :editor)),
-        user: generate(user(role: :user))
-      }
-    end
+    # def setup_users do
+    #   %{
+    #     admin: generate(user(role: :admin)),
+    #     editor: generate(user(role: :editor)),
+    #     user: generate(user(role: :user))
+    #   }
+    # end
 
-    @tag :skip
+    @tag skip: "Also uncomment the `setup_users` function above"
     test "only admins can create new artists" do
       # users = setup_users()
 
@@ -238,7 +245,7 @@ defmodule Tunez.Music.ArtistTest do
       # refute Music.can_create_artist?(nil)
     end
 
-    @tag :skip
+    @tag skip: "Also uncomment the `setup_users` function above"
     test "only admins can delete artists" do
       # users = setup_users()
       # artist = generate(artist())
@@ -249,7 +256,7 @@ defmodule Tunez.Music.ArtistTest do
       # refute Music.can_destroy_artist?(nil, artist)
     end
 
-    @tag :skip
+    @tag skip: "Also uncomment the `setup_users` function above"
     test "admins and editors can update artists" do
       # users = setup_users()
       # artist = generate(artist())
@@ -260,7 +267,7 @@ defmodule Tunez.Music.ArtistTest do
       # refute Music.can_update_artist?(nil, artist)
     end
 
-    @tag skip: "can be enabled during chapter 9"
+    @tag skip: "can be enabled during chapter 9. Also uncomment the `setup_users` function above"
     test "all authenticated users can follow/unfollow artists" do
       # users = setup_users()
       # artist = generate(artist())

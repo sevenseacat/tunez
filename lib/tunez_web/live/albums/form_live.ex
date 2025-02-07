@@ -49,25 +49,24 @@ defmodule TunezWeb.Albums.FormLive do
     <table class="table">
       <thead>
         <tr>
-          <th class="px-0">Number</th>
+          <th class="px-0">Order</th>
           <th>Name</th>
-          <th class="px-0" colspan="2">Duration (M:SS)</th>
+          <th class="px-0" colspan="2">Duration</th>
         </tr>
       </thead>
-      <tbody>
+      <tbody phx-hook="trackSort" id="trackSort">
         <.inputs_for :let={track_form} field={@form[:tracks]}>
-          <tr data-role={"track-#{track_form.index}"}>
+          <tr data-id={track_form.index}>
             <td class="align-top px-0 w-20">
-              <label for={track_form[:number].id} class="hidden">Number</label>
-              <.input field={track_form[:number]} type="number" />
+              <.input field={track_form[:order]} type="number" />
             </td>
             <td class="align-top">
               <label for={track_form[:name].id} class="hidden">Name</label>
               <.input field={track_form[:name]} />
             </td>
             <td class="align-top px-0 w-24">
-              <label for={track_form[:duration].id} class="hidden">Duration</label>
-              <.input field={track_form[:duration]} />
+              <label for={track_form[:duration_seconds].id} class="hidden">Duration</label>
+              <.input field={track_form[:duration_seconds]} />
             </td>
             <td class="align-top w-12 pt-5">
               <.button_link
@@ -97,6 +96,18 @@ defmodule TunezWeb.Albums.FormLive do
   end
 
   def handle_event("save", %{"form" => _form_data}, socket) do
+    {:noreply, socket}
+  end
+
+  def handle_event("add-track", _params, socket) do
+    {:noreply, socket}
+  end
+
+  def handle_event("remove-track", %{"path" => _path}, socket) do
+    {:noreply, socket}
+  end
+
+  def handle_event("reorder-tracks", %{"order" => _order}, socket) do
     {:noreply, socket}
   end
 end
