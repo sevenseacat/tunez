@@ -60,4 +60,8 @@ defmodule Tunez.Music.Track do
       allow_nil? false
     end
   end
+
+  calculations do
+    calculate :number, :integer, expr(order + 1)
+  end
 end
