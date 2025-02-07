@@ -6,6 +6,11 @@ defmodule Tunez.Music.Artist do
     repo Tunez.Repo
   end
 
+  actions do
+    defaults [:create, :read, :update, :destroy]
+    default_accept [:name, :biography]
+  end
+
   attributes do
     uuid_primary_key :id
 
