@@ -32,17 +32,24 @@ defmodule Tunez.MixProject do
   #
   # Type `mix help deps` for examples and options.
   defp deps do
-    [
+    deps = [
+      {:instructor, "~> 0.1"},
       {:ash_authentication_phoenix, "~> 2.0"},
       {:bcrypt_elixir, "~> 3.0"},
       {:picosat_elixir, "~> 0.2"},
-      {:ash_authentication, "~> 4.0"},
+      # {:ash_authentication, "~> 4.0"},
+      # {:ash_authentication, path: "../../ash/ash_authentication/", override: true},
       {:ash_graphql, "~> 1.0"},
       {:open_api_spex, "~> 3.0"},
-      {:ash_json_api, "~> 1.0"},
+      # {:ash_json_api, "~> 1.0", override: true},
       {:ash_phoenix, "~> 2.0"},
-      {:ash_postgres, "~> 2.0"},
-      {:ash, "~> 3.0"},
+      # {:ash_postgres, "~> 2.0"},
+      # {:ash, "~> 3.0"},
+      {:ash, path: "../../ash/ash", override: true},
+      {:ash_ai, path: "../../ash/ash_ai", override: true},
+      {:ash_json_api, path: "../../ash/ash_json_api", override: true},
+      {:ash_postgres, path: "../../ash/ash_postgres", override: true},
+      {:ash_sql, path: "../../ash/ash_sql", override: true},
       {:phoenix, "~> 1.7.14"},
       {:phoenix_ecto, "~> 4.5"},
       {:ecto_sql, "~> 3.10"},
@@ -69,9 +76,12 @@ defmodule Tunez.MixProject do
       {:jason, "~> 1.2"},
       {:dns_cluster, "~> 0.1.1"},
       {:bandit, "~> 1.5"},
-      {:igniter, "~> 0.3", only: [:dev]},
+      # {:igniter, "~> 0.5", only: [:dev]},
+      {:igniter, path: "../igniter", override: true},
       {:phoenix_test, "~> 0.5.1", only: :test, runtime: false}
     ]
+
+    deps
   end
 
   # Aliases are shortcuts or tasks specific to the current project.
@@ -86,8 +96,8 @@ defmodule Tunez.MixProject do
       "ecto.setup": ["ecto.create", "ecto.migrate"],
       seed: [
         "run priv/repo/seeds/01-artists.exs",
-        "run priv/repo/seeds/02-albums.exs",
-        "run priv/repo/seeds/08-tracks.exs"
+        "run priv/repo/seeds/02-albums.exs"
+        # "run priv/repo/seeds/08-tracks.exs"
       ],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       test: ["ash.setup --quiet", "test"],

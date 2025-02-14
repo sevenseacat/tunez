@@ -13,6 +13,8 @@ config :mime,
 
 config :ash_json_api, show_public_calculations_when_loaded?: false
 
+config :tunez, Tunez.Repo, types: Tunez.PostgrexTypes
+
 config :ash,
   include_embedded_source_by_default?: false,
   show_keysets_for_all_actions?: false,

@@ -1,0 +1,272 @@
+
+Create: lib/tunez_web/live/album_live/form_component.ex
+
+1  |defmodule TunezWeb.AlbumLive.FormComponent do
+2  |  use TunezWeb, :live_component
+3  |
+4  |  @impl true
+5  |  def render(assigns) do
+6  |    ~H"""
+7  |    <div>
+8  |      <.header>
+9  |        {@title}
+10 |        <:subtitle>Use this form to manage album records in your database.</:subtitle>
+11 |      </.header>
+12 |
+13 |      <.simple_form
+14 |        for={@form}
+15 |        id="album-form"
+16 |        phx-target={@myself}
+17 |        phx-change="validate"
+18 |        phx-submit="save"
+19 |      >
+20 |        <%= if @form.source.type == :create do %>
+21 |          <.input field={@form[:name]} type="text" label="Name" /><.input
+22 |            field={@form[:year_released]}
+23 |            type="number"
+24 |            label="Year released"
+25 |          /><.input field={@form[:cover_image_url]} type="text" label="Cover image url" /><.input
+26 |            field={@form[:artist_id]}
+27 |            type="text"
+28 |            label="Artist"
+29 |          />
+30 |        <% end %>
+31 |        <%= if @form.source.type == :update do %>
+32 |          <.input field={@form[:name]} type="text" label="Name" /><.input
+33 |            field={@form[:year_released]}
+34 |            type="number"
+35 |            label="Year released"
+36 |          /><.input field={@form[:cover_image_url]} type="text" label="Cover image url" />
+37 |        <% end %>
+38 |
+39 |        <:actions>
+40 |          <.button phx-disable-with="Saving...">Save Album</.button>
+41 |        </:actions>
+42 |      </.simple_form>
+43 |    </div>
+44 |    """
+45 |  end
+46 |
+47 |  @impl true
+48 |  def update(assigns, socket) do
+49 |    {:ok,
+50 |     socket
+51 |     |> assign(assigns)
+52 |     |> assign_form()}
+53 |  end
+54 |
+55 |  @impl true
+56 |  def handle_event("validate", %{"album" => album_params}, socket) do
+57 |    {:noreply, assign(socket, form: AshPhoenix.Form.validate(socket.assigns.form, album_params))}
+58 |  end
+59 |
+60 |  def handle_event("save", %{"album" => album_params}, socket) do
+61 |    case AshPhoenix.Form.submit(socket.assigns.form, params: album_params) do
+62 |      {:ok, album} ->
+63 |        notify_parent({:saved, album})
+64 |
+65 |        socket =
+66 |          socket
+67 |          |> put_flash(:info, "Album #{socket.assigns.form.source.type}d successfully")
+68 |          |> push_patch(to: socket.assigns.patch)
+69 |
+70 |        {:noreply, socket}
+71 |
+72 |      {:error, form} ->
+73 |        {:noreply, assign(socket, form: form)}
+74 |    end
+75 |  end
+76 |
+77 |  defp notify_parent(msg), do: send(self(), {__MODULE__, msg})
+78 |
+79 |  defp assign_form(%{assigns: %{album: album}} = socket) do
+80 |    form =
+81 |      if album do
+82 |        AshPhoenix.Form.for_update(album, :update, as: "album")
+83 |      else
+84 |        AshPhoenix.Form.for_create(Tunez.Music.Album, :create, as: "album")
+85 |      end
+86 |
+87 |    assign(socket, form: to_form(form))
+88 |  end
+89 |end
+90 |
+
+
+Create: lib/tunez_web/live/album_live/index.ex
+
+1   |defmodule TunezWeb.AlbumLive.Index do
+2   |  use TunezWeb, :live_view
+3   |
+4   |  @impl true
+5   |  def render(assigns) do
+6   |    ~H"""
+7   |    <.header>
+8   |      Listing Albums
+9   |      <:actions>
+10  |        <.link patch={~p"/albums/new"}>
+11  |          <.button>New Album</.button>
+12  |        </.link>
+13  |      </:actions>
+14  |    </.header>
+15  |
+16  |    <.table
+17  |      id="albums"
+18  |      rows={@streams.albums}
+19  |      row_click={fn {_id, album} -> JS.navigate(~p"/albums/#{album}") end}
+20  |    >
+21  |      <:col :let={{_id, album}} label="Id">{album.id}</:col>
+22  |
+23  |      <:col :let={{_id, album}} label="Name">{album.name}</:col>
+24  |
+25  |      <:col :let={{_id, album}} label="Year released">{album.year_released}</:col>
+26  |
+27  |      <:col :let={{_id, album}} label="Cover image url">{album.cover_image_url}</:col>
+28  |
+29  |      <:action :let={{_id, album}}>
+30  |        <div class="sr-only">
+31  |          <.link navigate={~p"/albums/#{album}"}>Show</.link>
+32  |        </div>
+33  |
+34  |        <.link patch={~p"/albums/#{album}/edit"}>Edit</.link>
+35  |      </:action>
+36  |
+37  |      <:action :let={{id, album}}>
+38  |        <.link
+39  |          phx-click={JS.push("delete", value: %{id: album.id}) |> hide("##{id}")}
+40  |          data-confirm="Are you sure?"
+41  |        >
+42  |          Delete
+43  |        </.link>
+44  |      </:action>
+45  |    </.table>
+46  |
+47  |    <.modal
+48  |      :if={@live_action in [:new, :edit]}
+49  |      id="album-modal"
+50  |      show
+51  |      on_cancel={JS.patch(~p"/albums")}
+52  |    >
+53  |      <.live_component
+54  |        module={TunezWeb.AlbumLive.FormComponent}
+55  |        id={(@album && @album.id) || :new}
+56  |        title={@page_title}
+57  |        action={@live_action}
+58  |        album={@album}
+59  |        patch={~p"/albums"}
+60  |      />
+61  |    </.modal>
+62  |    """
+63  |  end
+64  |
+65  |  @impl true
+66  |  def mount(_params, _session, socket) do
+67  |    {:ok, stream(socket, :albums, Ash.read!(Tunez.Music.Album))}
+68  |  end
+69  |
+70  |  @impl true
+71  |  def handle_params(params, _url, socket) do
+72  |    {:noreply, apply_action(socket, socket.assigns.live_action, params)}
+73  |  end
+74  |
+75  |  defp apply_action(socket, :edit, %{"id" => id}) do
+76  |    socket
+77  |    |> assign(:page_title, "Edit Album")
+78  |    |> assign(:album, Ash.get!(Tunez.Music.Album, id))
+79  |  end
+80  |
+81  |  defp apply_action(socket, :new, _params) do
+82  |    socket
+83  |    |> assign(:page_title, "New Album")
+84  |    |> assign(:album, nil)
+85  |  end
+86  |
+87  |  defp apply_action(socket, :index, _params) do
+88  |    socket
+89  |    |> assign(:page_title, "Listing Albums")
+90  |    |> assign(:album, nil)
+91  |  end
+92  |
+93  |  @impl true
+94  |  def handle_info({TunezWeb.AlbumLive.FormComponent, {:saved, album}}, socket) do
+95  |    {:noreply, stream_insert(socket, :albums, album)}
+96  |  end
+97  |
+98  |  @impl true
+99  |  def handle_event("delete", %{"id" => id}, socket) do
+100 |    album = Ash.get!(Tunez.Music.Album, id)
+101 |    Ash.destroy!(album)
+102 |
+103 |    {:noreply, stream_delete(socket, :albums, album)}
+104 |  end
+105 |end
+106 |
+
+
+Create: lib/tunez_web/live/album_live/show.ex
+
+1  |defmodule TunezWeb.AlbumLive.Show do
+2  |  use TunezWeb, :live_view
+3  |
+4  |  @impl true
+5  |  def render(assigns) do
+6  |    ~H"""
+7  |    <.header>
+8  |      Album {@album.id}
+9  |      <:subtitle>This is a album record from your database.</:subtitle>
+10 |
+11 |      <:actions>
+12 |        <.link patch={~p"/albums/#{@album}/show/edit"} phx-click={JS.push_focus()}>
+13 |          <.button>Edit album</.button>
+14 |        </.link>
+15 |      </:actions>
+16 |    </.header>
+17 |
+18 |    <.list>
+19 |      <:item title="Id">{@album.id}</:item>
+20 |
+21 |      <:item title="Name">{@album.name}</:item>
+22 |
+23 |      <:item title="Year released">{@album.year_released}</:item>
+24 |
+25 |      <:item title="Cover image url">{@album.cover_image_url}</:item>
+26 |    </.list>
+27 |
+28 |    <.back navigate={~p"/albums"}>Back to albums</.back>
+29 |
+30 |    <.modal
+31 |      :if={@live_action == :edit}
+32 |      id="album-modal"
+33 |      show
+34 |      on_cancel={JS.patch(~p"/albums/#{@album}")}
+35 |    >
+36 |      <.live_component
+37 |        module={TunezWeb.AlbumLive.FormComponent}
+38 |        id={@album.id}
+39 |        title={@page_title}
+40 |        action={@live_action}
+41 |        album={@album}
+42 |        patch={~p"/albums/#{@album}"}
+43 |      />
+44 |    </.modal>
+45 |    """
+46 |  end
+47 |
+48 |  @impl true
+49 |  def mount(_params, _session, socket) do
+50 |    {:ok, socket}
+51 |  end
+52 |
+53 |  @impl true
+54 |  def handle_params(%{"id" => id}, _, socket) do
+55 |    {:noreply,
+56 |     socket
+57 |     |> assign(:page_title, page_title(socket.assigns.live_action))
+58 |     |> assign(:album, Ash.get!(Tunez.Music.Album, id))}
+59 |  end
+60 |
+61 |  defp page_title(:show), do: "Show Album"
+62 |  defp page_title(:edit), do: "Edit Album"
+63 |end
+64 |
+

@@ -3,7 +3,7 @@ defmodule Tunez.Music.Album do
     otp_app: :tunez,
     domain: Tunez.Music,
     data_layer: AshPostgres.DataLayer,
-    extensions: [AshGraphql.Resource, AshJsonApi.Resource],
+    extensions: [AshGraphql.Resource, AshJsonApi.Resource, AshAi],
     authorizers: [Ash.Policy.Authorizer]
 
   graphql do
@@ -21,6 +21,24 @@ defmodule Tunez.Music.Album do
     references do
       reference :artist, on_delete: :delete
     end
+  end
+
+  ai_agent do
+    expose([:create, :update, :destroy, :read, :vector_search])
+  end
+
+  vectorize do
+    full_text do
+      text(fn record ->
+        """
+        Id: #{record.id}
+        Name: #{record.name}
+        Year Released: #{record.year_released}
+        """
+      end)
+    end
+
+    attributes(name: :vectorized_name)
   end
 
   actions do
@@ -58,10 +76,17 @@ defmodule Tunez.Music.Album do
   end
 
   changes do
-    change relate_actor(:created_by, allow_nil?: true), on: [:create]
-    change relate_actor(:updated_by, allow_nil?: true), on: [:create]
+    change relate_actor(:created_by, allow_nil?: true),
+      on: [:create],
+      where: [negate({AshAi.Validations.ActorIsAshAi, []})]
 
-    change relate_actor(:updated_by, allow_nil?: false), on: [:update]
+    change relate_actor(:updated_by, allow_nil?: true),
+      on: [:create],
+      where: [negate({AshAi.Validations.ActorIsAshAi, []})]
+
+    change relate_actor(:updated_by, allow_nil?: false),
+      on: [:update],
+      where: [negate({AshAi.Validations.ActorIsAshAi, []})]
   end
 
   validations do
@@ -84,6 +109,8 @@ defmodule Tunez.Music.Album do
       allow_nil? false
       public? true
     end
+
+    attribute :foo, :vector, constraints: [dimensions: 1523]
 
     attribute :year_released, :integer do
       allow_nil? false

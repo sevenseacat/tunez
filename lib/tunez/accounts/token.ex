@@ -29,10 +29,10 @@ defmodule Tunez.Accounts.Token do
       prepare AshAuthentication.TokenResource.GetTokenPreparation
     end
 
-    action :revoked? do
+    action :revoked?, :boolean do
       description "Returns true if a revocation token is found for the provided token"
-      argument :token, :string, sensitive?: true, allow_nil?: false
-      argument :jti, :string, sensitive?: true, allow_nil?: false
+      argument :token, :string, sensitive?: true
+      argument :jti, :string, sensitive?: true
 
       run AshAuthentication.TokenResource.IsRevoked
     end
@@ -71,8 +71,6 @@ defmodule Tunez.Accounts.Token do
   end
 
   attributes do
-    uuid_primary_key :id
-
     attribute :jti, :string do
       primary_key? true
       public? true

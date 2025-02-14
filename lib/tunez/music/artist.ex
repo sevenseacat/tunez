@@ -3,7 +3,7 @@ defmodule Tunez.Music.Artist do
     otp_app: :tunez,
     domain: Tunez.Music,
     data_layer: AshPostgres.DataLayer,
-    extensions: [AshGraphql.Resource, AshJsonApi.Resource],
+    extensions: [AshGraphql.Resource, AshJsonApi.Resource, AshAi],
     authorizers: [Ash.Policy.Authorizer]
 
   graphql do
@@ -31,6 +31,24 @@ defmodule Tunez.Music.Artist do
     custom_indexes do
       index "name gin_trgm_ops", name: "artists_name_gin_index", using: "GIN"
     end
+  end
+
+  vectorize do
+    full_text do
+      text(fn record ->
+        """
+        Id: #{record.id}
+        Name: #{record.name}
+        Biography: #{record.biography}
+        """
+      end)
+    end
+
+    attributes(name: :vectorized_name)
+  end
+
+  ai_agent do
+    expose([:create, :update, :destroy, :search, :vector_search])
   end
 
   resource do
@@ -83,10 +101,17 @@ defmodule Tunez.Music.Artist do
   end
 
   changes do
-    change relate_actor(:created_by, allow_nil?: true), on: [:create]
-    change relate_actor(:updated_by, allow_nil?: true), on: [:create]
+    change relate_actor(:created_by, allow_nil?: true),
+      on: [:create],
+      where: [negate({AshAi.Validations.ActorIsAshAi, []})]
 
-    change relate_actor(:updated_by, allow_nil?: false), on: [:update]
+    change relate_actor(:updated_by, allow_nil?: true),
+      on: [:create],
+      where: [negate({AshAi.Validations.ActorIsAshAi, []})]
+
+    change relate_actor(:updated_by, allow_nil?: false),
+      on: [:update],
+      where: [negate({AshAi.Validations.ActorIsAshAi, []})]
   end
 
   attributes do
