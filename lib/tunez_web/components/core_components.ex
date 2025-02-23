@@ -50,21 +50,25 @@ defmodule TunezWeb.CoreComponents do
       phx-click={JS.push("lv:clear-flash", value: %{key: @kind}) |> hide("##{@id}")}
       role="alert"
       class={[
-        "flash-#{@kind}",
-        "w-80 sm:w-96 shadow-lg mb-2 border-0 border-l-4 bg-base-100 cursor-pointer rounded-box p-4",
-        @kind == :info && "border-success",
-        @kind == :error && "border-error",
-        @kind == :warning && "border-warning"
+        "relative",
+        "w-80 sm:w-96 shadow-lg mb-2 border-0 border-l-4 bg-white cursor-pointer rounded-lg p-4",
+        @kind == :info && "border-green-600",
+        @kind == :error && "border-error-600",
+        @kind == :warning && "border-yellow-500"
       ]}
       {@rest}
     >
       <div class="grid grid-flow-cols grid-cols-[auto_minmax(auto,1fr)] justify-items-start text-start gap-2 items-center">
-        <.icon :if={@kind == :error} name="hero-exclamation-circle-mini" class="w-6 h-6 text-error" />
-        <.icon :if={@kind == :info} name="hero-check-circle-mini" class="w-6 h-6 text-success" />
+        <.icon
+          :if={@kind == :error}
+          name="hero-exclamation-circle-mini"
+          class="w-6 h-6 text-error-600"
+        />
+        <.icon :if={@kind == :info} name="hero-check-circle-mini" class="w-6 h-6 text-green-600" />
         <.icon
           :if={@kind == :warning}
           name="hero-exclamation-circle-mini"
-          class="w-6 h-6 text-warning"
+          class="w-6 h-6 text-yellow-500"
         />
         <div>
           <p :if={@title} class="font-semibold text-sm">{@title}</p>
@@ -148,43 +152,33 @@ defmodule TunezWeb.CoreComponents do
     <%= if @image do %>
       <img src={@image} class="block aspect-square rounded-md w-full" />
     <% else %>
-      <div class="border border-base-content/25 place-content-center grid rounded-md aspect-square">
-        <.icon name="hero-photo" class="bg-base-content/25 w-8 h-8" />
+      <div class="border border-gray-300 place-content-center grid rounded-md aspect-square">
+        <.icon name="hero-photo" class="bg-gray-300 w-8 h-8" />
       </div>
     <% end %>
     """
   end
 
   attr :kind, :string,
-    values: ~w(base neutral primary secondary accent ghost error),
+    values: ~w(base primary error),
     default: "base"
 
-  attr :outline, :boolean, default: false
-  attr :text, :boolean, default: false
-  attr :size, :string, values: ~w(lg sm xs md), default: "md"
+  attr :inverse, :boolean, default: false
+  attr :size, :string, values: ~w(sm xs md), default: "md"
   attr :class, :string, default: ""
   attr :rest, :global, include: ~w(navigate disabled patch)
 
   slot :inner_block
 
   def button_link(assigns) do
+    assigns =
+      assign(assigns, :theme, button_styles(assigns.kind, assigns.inverse, assigns.size))
+
     ~H"""
     <.link
       class={[
-        "btn",
-        @size == "lg" && "btn-lg",
-        @size == "sm" && "btn-sm",
-        @size == "xs" && "btn-xs",
-        @kind == "primary" && "btn-primary",
-        @kind == "secondary" && "btn-secondary",
-        @kind == "neutral" && "btn-neutral",
-        @kind == "accent" && "btn-accent",
-        @kind == "ghost" && "btn-ghost",
-        @kind == "error" && "btn-ghost text-error",
-        @kind == "error" && !(@outline || @text) && "bg-red-100 hover:bg-red-200",
-        @outline && "btn-outline",
-        @text && "btn-link",
-        @rest[:disabled] && "!bg-base-200",
+        @theme,
+        @rest[:disabled] && "opacity-60 grayscale pointer-events-none",
         @class
       ]}
       {@rest}
@@ -192,6 +186,40 @@ defmodule TunezWeb.CoreComponents do
       {render_slot(@inner_block)}
     </.link>
     """
+  end
+
+  def button_styles(kind, inverse, size) do
+    theme =
+      case {kind, inverse} do
+        {"base", false} ->
+          "bg-gray-100"
+
+        {"base", true} ->
+          "border border-gray-500 text-gray-600"
+
+        {"primary", false} ->
+          "bg-primary-600 hover:bg-primary-700 text-white"
+
+        {"primary", true} ->
+          "border border-primary-700 text-primary-700 hover:bg-primary-50 font-semibold"
+
+        {"error", false} ->
+          "bg-error-700 hover:bg-error-800 text-white"
+
+        {"error", true} ->
+          "text-error-600 underline"
+
+        _ ->
+          ""
+      end
+
+    [
+      "phx-submit-loading:opacity-75 rounded-lg font-medium leading-none inline-block",
+      size == "md" && "py-3 px-5 text-sm",
+      size == "sm" && "py-2 px-3 text-sm",
+      size == "xs" && "py-2 px-2 text-xs",
+      theme
+    ]
   end
 
   @doc """
@@ -240,7 +268,6 @@ defmodule TunezWeb.CoreComponents do
   """
   attr :type, :string, default: nil
   attr :class, :string, default: nil
-  attr :kind, :string, values: ["primary", "secondary"], default: "primary"
   attr :rest, :global, include: ~w(disabled form name value)
 
   slot :inner_block, required: true
@@ -249,12 +276,16 @@ defmodule TunezWeb.CoreComponents do
     ~H"""
     <button
       type={@type}
-      class={[
-        "phx-submit-loading:opacity-75 btn",
-        @kind == "primary" && "btn-primary",
-        @kind == "secondary" && "btn-secondary",
-        @class
-      ]}
+      class={
+        [
+          "phx-submit-loading:opacity-75 rounded-lg font-medium leading-none",
+          # medium
+          "py-3 px-4 text-sm",
+          # primary
+          "bg-primary-600 hover:bg-primary-700 text-white",
+          @class
+        ]
+      }
       {@rest}
     >
       {render_slot(@inner_block)}
@@ -292,6 +323,8 @@ defmodule TunezWeb.CoreComponents do
   attr :name, :any
   attr :label, :string, default: nil
   attr :value, :any
+  attr :class, :string, default: "", doc: "Any extra classes to be applied"
+  attr :container_class, :string, default: "", doc: "Classes to be applied to the parent div"
 
   attr :type, :string,
     default: "text",
@@ -329,7 +362,7 @@ defmodule TunezWeb.CoreComponents do
       end)
 
     ~H"""
-    <.form_control errors={@errors}>
+    <.form_control class={@container_class} errors={@errors}>
       <label class="flex items-center gap-4 text-sm leading-6 text-zinc-600">
         <input type="hidden" name={@name} value="false" disabled={@rest[:disabled]} />
         <input
@@ -338,7 +371,7 @@ defmodule TunezWeb.CoreComponents do
           name={@name}
           value="true"
           checked={@checked}
-          class="rounded border-zinc-300 text-zinc-900 focus:ring-0"
+          class={[form_input_styles(), @class]}
           {@rest}
         />
         {@label}
@@ -350,15 +383,9 @@ defmodule TunezWeb.CoreComponents do
 
   def input(%{type: "select"} = assigns) do
     ~H"""
-    <.form_control errors={@errors}>
-      <.label :if={@label} for={@id}>{@label}</.label>
-      <select
-        id={@id}
-        name={@name}
-        class="select select-bordered error:select-error"
-        multiple={@multiple}
-        {@rest}
-      >
+    <.form_control class={@container_class} errors={@errors}>
+      <.label for={@id}>{@label}</.label>
+      <select id={@id} name={@name} class={[form_input_styles(), @class]} multiple={@multiple} {@rest}>
         <option :if={@prompt} value="">{@prompt}</option>
         {Phoenix.HTML.Form.options_for_select(@options, @value)}
       </select>
@@ -369,14 +396,9 @@ defmodule TunezWeb.CoreComponents do
 
   def input(%{type: "textarea"} = assigns) do
     ~H"""
-    <.form_control errors={@errors}>
-      <.label :if={@label} for={@id}>{@label}</.label>
-      <textarea
-        id={@id}
-        name={@name}
-        class="textarea textarea-bordered min-h-[6rem] error:textarea-error"
-        {@rest}
-      ><%= Phoenix.HTML.Form.normalize_value("textarea", @value) %></textarea>
+    <.form_control class={@container_class} errors={@errors}>
+      <.label for={@id}>{@label}</.label>
+      <textarea id={@id} name={@name} class={[form_input_styles(), @class, "min-h-[6rem]"]} {@rest}><%= Phoenix.HTML.Form.normalize_value("textarea", @value) %></textarea>
       <.error :for={msg <- @errors}>{msg}</.error>
     </.form_control>
     """
@@ -385,14 +407,14 @@ defmodule TunezWeb.CoreComponents do
   # All other inputs text, datetime-local, url, password, etc. are handled here...
   def input(assigns) do
     ~H"""
-    <.form_control errors={@errors}>
-      <.label :if={@label} for={@id}>{@label}</.label>
+    <.form_control class={@container_class} errors={@errors}>
+      <.label for={@id}>{@label}</.label>
       <input
         type={@type}
         name={@name}
         id={@id}
         value={Phoenix.HTML.Form.normalize_value(@type, @value)}
-        class="input input-bordered w-full error:input-error"
+        class={[form_input_styles(), @class]}
         phx-debounce="250"
         {@rest}
       />
@@ -401,12 +423,22 @@ defmodule TunezWeb.CoreComponents do
     """
   end
 
+  def form_input_styles do
+    [
+      "my-2 block w-full rounded-lg text-zinc-900 focus:ring focus:outline-none sm:leading-6",
+      "border-zinc-300 focus:border-zinc-400 focus:ring-zinc-100",
+      "error:border-error-400 error:focus:border-error-600 error:focus:ring-error-100",
+      "disabled:bg-gray-100 disabled:text-zinc-400"
+    ]
+  end
+
   attr :errors, :list, default: []
+  attr :class, :string, default: ""
   slot :inner_block
 
   def form_control(assigns) do
     ~H"""
-    <div class={["form-control", @errors != [] && "error"]}>
+    <div class={[@class, @errors != [] && "error"]}>
       {render_slot(@inner_block)}
     </div>
     """
@@ -420,7 +452,7 @@ defmodule TunezWeb.CoreComponents do
 
   def label(assigns) do
     ~H"""
-    <label for={@for} class="block label cursor-pointer error:text-error">
+    <label for={@for} class="text-sm font-medium leading-6 text-zinc-800 error:text-error-600">
       {render_slot(@inner_block)}
     </label>
     """
@@ -433,7 +465,7 @@ defmodule TunezWeb.CoreComponents do
 
   def error(assigns) do
     ~H"""
-    <p class="mt-2 flex gap-2 text-sm leading-6 text-error">
+    <p class="mt-1.5 flex gap-1.5 text-sm leading-6 text-error-600 items-center">
       <.icon name="hero-exclamation-circle-mini" class="mt-0.5 h-5 w-5 flex-none" />
       {render_slot(@inner_block)}
     </p>
@@ -454,6 +486,8 @@ defmodule TunezWeb.CoreComponents do
   slot :action
 
   def header(assigns) do
+    assigns = assign_new(assigns, :dropdown_id, fn -> "dropdown_#{Ecto.UUID.generate()}" end)
+
     ~H"""
     <header class={[
       @action != [] && "flex items-center justify-between sm:gap-3 md:gap-6",
@@ -469,28 +503,35 @@ defmodule TunezWeb.CoreComponents do
       <div
         :if={@action != []}
         class={[
-          !@responsive && "flex-none space-x-4",
-          @responsive && "max-sm:dropdown max-sm:dropdown-end sm:flex-none sm:space-x-4"
+          !@responsive && "flex-none",
+          @responsive && "max-sm:relative sm:flex-none sm:space-x-4"
         ]}
       >
         <div
           :if={@responsive}
           tabindex="0"
           role="button"
-          class="btn btn-sm btn-primary btn-outline sm:hidden"
+          class={[button_styles("primary", true, "xs"), "sm:hidden"]}
+          phx-click={toggle("##{@dropdown_id}")}
+          phx-click-away={hide("##{@dropdown_id}")}
         >
           <.icon name="hero-chevron-double-down w-4 h-4" />
         </div>
         <div
+          id={@dropdown_id}
           tabindex="0"
           class={[
-            !@responsive && "space-x-4",
             @responsive &&
-              "dropdown-content max-sm:flex max-sm:flex-col-reverse max-sm:z-[1] max-sm:menu
-               max-sm:p-2 max-sm:shadow max-sm:bg-base-100 max-sm:rounded-box max-sm:w-52 sm:space-x-4"
+              "max-sm:hidden max-sm:absolute max-sm:right-0 max-sm:bg-white max-sm:shadow max-sm:rounded sm:!block"
           ]}
         >
-          {render_slot(@action)}
+          <div class={[
+            !@responsive && "space-x-4",
+            @responsive &&
+              "max-sm:flex max-sm:flex-col-reverse max-sm:p-2 max-sm:w-48 sm:space-x-4"
+          ]}>
+            {render_slot(@action)}
+          </div>
         </div>
       </div>
     </header>
@@ -532,7 +573,7 @@ defmodule TunezWeb.CoreComponents do
 
     ~H"""
     <img
-      class={["mask mask-circle size-8", @class]}
+      class={["rounded-full size-8", @class]}
       src={"https://api.dicebear.com/9.x/shapes/svg?seed=#{@seed}"}
     />
     """
@@ -584,6 +625,21 @@ defmodule TunezWeb.CoreComponents do
   end
 
   ## JS Commands
+
+  def toggle(js \\ %JS{}, selector) do
+    JS.toggle(js,
+      to: selector,
+      time: 300,
+      in:
+        {"transition-all transform ease-out duration-300",
+         "opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95",
+         "opacity-100 translate-y-0 sm:scale-100"},
+      out:
+        {"transition-all transform ease-in duration-200",
+         "opacity-100 translate-y-0 sm:scale-100",
+         "opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"}
+    )
+  end
 
   def show(js \\ %JS{}, selector) do
     JS.show(js,

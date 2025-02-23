@@ -41,7 +41,7 @@ defmodule TunezWeb.Artists.ShowLive do
       <:action>
         <.button_link
           kind="error"
-          text
+          inverse
           data-confirm={"Are you sure you want to delete #{@artist.name}?"}
           phx-click="destroy_artist"
         >
@@ -49,7 +49,7 @@ defmodule TunezWeb.Artists.ShowLive do
         </.button_link>
       </:action>
       <:action>
-        <.button_link navigate={~p"/artists/#{@artist.id}/edit"} kind="primary" outline>
+        <.button_link navigate={~p"/artists/#{@artist.id}/edit"} kind="primary" inverse>
           Edit Artist
         </.button_link>
       </:action>
@@ -75,14 +75,14 @@ defmodule TunezWeb.Artists.ShowLive do
         <.cover_image image={@album.cover_image_url} />
       </div>
       <div class="flex-1">
-        <.header class="pl-4 pr-2 !m-0">
+        <.header class="pl-3 pr-2 !m-0">
           <.h2>
             {@album.name} ({@album.year_released})
           </.h2>
           <:action>
             <.button_link
               size="sm"
-              text
+              inverse
               kind="error"
               data-confirm={"Are you sure you want to delete #{@album.name}?"}
               phx-click="destroy_album"
@@ -92,7 +92,7 @@ defmodule TunezWeb.Artists.ShowLive do
             </.button_link>
           </:action>
           <:action>
-            <.button_link size="sm" kind="primary" outline navigate={~p"/albums/#{@album.id}/edit"}>
+            <.button_link size="sm" kind="primary" inverse navigate={~p"/albums/#{@album.id}/edit"}>
               Edit
             </.button_link>
           </:action>
@@ -105,16 +105,16 @@ defmodule TunezWeb.Artists.ShowLive do
 
   defp track_details(assigns) do
     ~H"""
-    <table :if={@tracks != []} class="table table-md w-full mt-2 -z-10">
-      <tr :for={track <- @tracks}>
-        <th class="whitespace-nowrap w-1">
+    <table :if={@tracks != []} class="w-full mt-2 -z-10">
+      <tr :for={track <- @tracks} class="border-t first:border-0 border-gray-100">
+        <th class="whitespace-nowrap w-1 p-3">
           {String.pad_leading("#{track.order}", 2, "0")}.
         </th>
-        <td>{track.name}</td>
-        <td class="whitespace-nowrap w-1 text-right">{track.duration_seconds}</td>
+        <td class="p-3">{track.name}</td>
+        <td class="whitespace-nowrap w-1 text-right p-2">{track.duration_seconds}</td>
       </tr>
     </table>
-    <div :if={@tracks == []} class="p-8 text-center italic text-base-content/40">
+    <div :if={@tracks == []} class="p-8 text-center italic text-gray-400">
       <.icon name="hero-clock" class="w-12 h-12 bg-base-300" /> Track data coming soon....
     </div>
     """

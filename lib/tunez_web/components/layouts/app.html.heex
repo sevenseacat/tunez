@@ -1,15 +1,17 @@
-<div class="flex flex-col w-full max-w-6xl m-auto">
-  <div class="w-full navbar px-4 pb-0">
+<div class="w-full max-w-6xl m-auto">
+  <div class="flex items-center w-full p-4 pb-2 border-b-2 border-primary-600">
     <div class="flex-1 mr-4">
       <.link navigate={~p"/"}>
-        <.icon name="hero-musical-note-solid" class="w-8 h-8 bg-accent inline-block align-middle" />
-        <span class="text-2xl font-bold text-accent inline-block align-middle mb-1 ml-1">
+        <.icon
+          name="hero-musical-note-solid"
+          class="w-8 h-8 bg-accent-400 inline-block align-middle"
+        />
+        <span class="text-2xl font-bold text-accent-400 inline-block align-middle mb-1 ml-1">
           Tunez
         </span>
       </.link>
     </div>
   </div>
-  <div class="divider divider-primary m-0"></div>
   <div class="px-4">
     <.flash_group flash={@flash} />
 

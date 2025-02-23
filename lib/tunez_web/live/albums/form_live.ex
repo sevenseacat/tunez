@@ -46,38 +46,37 @@ defmodule TunezWeb.Albums.FormLive do
     ~H"""
     <.h2>Tracks</.h2>
 
-    <table class="table">
-      <thead>
+    <table class="w-full">
+      <thead class="border-b border-zinc-100">
         <tr>
-          <th class="px-0">Order</th>
-          <th>Name</th>
-          <th class="px-0" colspan="2">Duration</th>
+          <th class=""></th>
+          <th class="text-left font-medium text-sm pb-1 px-3">Name</th>
+          <th class="text-left font-medium text-sm pb-1 px-3" colspan="2">Duration</th>
         </tr>
       </thead>
       <tbody phx-hook="trackSort" id="trackSort">
         <.inputs_for :let={track_form} field={@form[:tracks]}>
           <tr data-id={track_form.index}>
-            <td class="align-top px-0 w-20">
+            <td class="px-3 w-20">
               <.input field={track_form[:order]} type="number" />
             </td>
-            <td class="align-top">
+            <td class="px-3">
               <label for={track_form[:name].id} class="hidden">Name</label>
               <.input field={track_form[:name]} />
             </td>
-            <td class="align-top px-0 w-24">
+            <td class="px-3 w-36">
               <label for={track_form[:duration_seconds].id} class="hidden">Duration</label>
               <.input field={track_form[:duration_seconds]} />
             </td>
-            <td class="align-top w-12 pt-5">
+            <td class="w-12">
               <.button_link
                 phx-click="remove-track"
                 phx-value-path={track_form.name}
                 kind="error"
                 size="xs"
-                text
-                class="mt-0.5"
+                inverse
               >
-                <.icon name="hero-trash" class="w-5 h-5" />
+                <.icon name="hero-trash" class="size-5" />
               </.button_link>
             </td>
           </tr>
@@ -85,7 +84,7 @@ defmodule TunezWeb.Albums.FormLive do
       </tbody>
     </table>
 
-    <.button_link phx-click="add-track" kind="primary" size="sm" outline>
+    <.button_link phx-click="add-track" kind="primary" size="sm" inverse>
       Add Track
     </.button_link>
     """

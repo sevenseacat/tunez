@@ -14,34 +14,39 @@ defmodule TunezWeb.Layouts do
 
   def user_info(assigns) do
     ~H"""
-    <div class="space-x-3">
+    <div class="flex space-x-3 relative items-center">
       <%= if @current_user do %>
         <.live_component module={TunezWeb.Notifications} id={:notifications} notifications={[]} />
 
-        <div class="dropdown dropdown-end">
-          <div tabindex="0" role="button" class="btn btn-link pr-0">
+        <div class="!ml-8">
+          <div
+            tabindex="0"
+            role="button"
+            class="pr-0"
+            phx-click={toggle("#user-menu")}
+            phx-click-away={hide("#user-menu")}
+          >
             <.avatar user={@current_user} />
           </div>
           <ul
+            id="user-menu"
             tabindex="0"
-            class="menu menu-sm dropdown-content z-[1] p-2 shadow bg-base-100 rounded-box w-fit-content"
+            class="hidden z-[1] p-2 mt-3 shadow rounded-box w-fit-content absolute right-0 bg-white text-sm"
           >
-            <li class="border-b border-base-200 mb-1 pb-1">
-              <div>
-                <p>
-                  Signed in as <strong class="whitespace-nowrap">{@current_user.email}</strong>
-                </p>
-              </div>
+            <li class="border-b border-base-200 p-2 pt-0">
+              <p>
+                Signed in as <strong class="whitespace-nowrap">{@current_user.email}</strong>
+              </p>
             </li>
-            <li><.link navigate="/sign-out">Sign out</.link></li>
+            <li class="p-2 pb-0"><.link navigate="/sign-out" class="block">Sign out</.link></li>
           </ul>
         </div>
       <% else %>
-        <.button_link navigate="/sign-in" size="xs" type="ghost">
+        <.button_link navigate="/sign-in" size="xs">
           Sign In
         </.button_link>
         <span>or</span>
-        <.button_link navigate="/register" size="xs" type="ghost">
+        <.button_link navigate="/register" size="xs">
           Register
         </.button_link>
       <% end %>

@@ -5,7 +5,7 @@ export default {
         var sortable = new Sortable(this.el, {
             handle: ".handle",
             draggable: "tr",
-            ghostClass: "bg-base-200",
+            ghostClass: "bg-gray-100",
             onSort: (e) => {
                 this.pushEvent("reorder-tracks", { order: sortable.toArray(e.to) })
             }

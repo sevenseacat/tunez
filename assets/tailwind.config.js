@@ -1,6 +1,7 @@
 // See the Tailwind configuration guide for advanced usage
 // https://tailwindcss.com/docs/configuration
 
+const colors = require("tailwindcss/colors")
 const plugin = require("tailwindcss/plugin")
 const fs = require("fs")
 const path = require("path")
@@ -15,26 +16,14 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        brand: "#FD4F00",
+        primary: colors.indigo,
+        accent: colors.teal,
+        error: colors.red
       }
-    },
-  },
-  daisyui: {
-    themes: [
-      {
-        light: {
-          ...require("daisyui/src/theming/themes")["light"],
-          "--rounded-box": "0.375rem", // rounded-md
-          "--rounded-btn": "0.375rem",
-          "--er": "57.71% 0.215 27.33"
-        },
-      },
-    ],
-    logs: false
+    }
   },
   plugins: [
     require("@tailwindcss/forms"),
-    require("daisyui"),
     // Allows prefixing tailwind classes with LiveView classes to add rules
     // only when LiveView classes are applied, for example:
     //
