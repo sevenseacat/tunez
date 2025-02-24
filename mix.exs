@@ -33,6 +33,7 @@ defmodule Tunez.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     deps = [
+      {:mcp_sse, "~> 0.1"},
       {:instructor, "~> 0.1"},
       {:ash_authentication_phoenix, "~> 2.0"},
       {:bcrypt_elixir, "~> 3.0"},

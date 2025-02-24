@@ -9,7 +9,10 @@ import Config
 
 config :mime,
   extensions: %{"json" => "application/vnd.api+json"},
-  types: %{"application/vnd.api+json" => ["json"]}
+  types: %{"application/vnd.api+json" => ["json"], "text/event-stream" => ["sse"]}
+
+# Configure the MCP Server
+config :tunez, :mcp_server, YourApp.MCPServer
 
 config :ash_json_api, show_public_calculations_when_loaded?: false
 

@@ -27,6 +27,19 @@ defmodule TunezWeb.Router do
     plug :set_actor, :user
   end
 
+  pipeline :sse do
+    plug :accepts, ["sse"]
+    plug :ensure_session_id
+  end
+
+  scope "/" do
+    pipe_through :sse
+    get "/sse", SSE.ConnectionPlug, :call
+
+    pipe_through :api
+    post "/message", SSE.ConnectionPlug, :call
+  end
+
   scope "/", TunezWeb do
     pipe_through :browser
 
@@ -112,5 +125,28 @@ defmodule TunezWeb.Router do
       live_dashboard "/dashboard", metrics: TunezWeb.Telemetry
       forward "/mailbox", Plug.Swoosh.MailboxPreview
     end
+  end
+
+  # Middleware to ensure session ID exists
+  def ensure_session_id(conn, _opts) do
+    case get_session_id(conn) do
+      nil ->
+        # Generate a new session ID if none exists
+        session_id = generate_session_id()
+        %{conn | query_params: Map.put(conn.query_params, "sessionId", session_id)}
+
+      _session_id ->
+        conn
+    end
+  end
+
+  # Helper to get session ID from query params
+  defp get_session_id(conn) do
+    conn.query_params["sessionId"]
+  end
+
+  # Generate a unique session ID
+  defp generate_session_id do
+    Base.encode16(:crypto.strong_rand_bytes(8), case: :lower)
   end
 end
