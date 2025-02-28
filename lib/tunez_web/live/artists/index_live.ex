@@ -116,7 +116,7 @@ defmodule TunezWeb.Artists.IndexLive do
     assigns = assign(assigns, :options, sort_options())
 
     ~H"""
-    <form data-role="artist-sort" class="hidden sm:inline" phx-change="change_sort">
+    <form data-role="artist-sort" class="hidden sm:inline" phx-change="change-sort">
       <.input
         label="sort by:"
         type="select"
@@ -153,7 +153,7 @@ defmodule TunezWeb.Artists.IndexLive do
     Enum.filter(params, fn {_key, val} -> val != "" end)
   end
 
-  def handle_event("change_sort", %{"sort_by" => sort_by}, socket) do
+  def handle_event("change-sort", %{"sort_by" => sort_by}, socket) do
     params = remove_empty(%{q: socket.assigns.query_text, sort_by: sort_by})
     {:noreply, push_patch(socket, to: ~p"/?#{params}")}
   end

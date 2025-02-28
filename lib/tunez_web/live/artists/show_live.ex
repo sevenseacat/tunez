@@ -43,7 +43,7 @@ defmodule TunezWeb.Artists.ShowLive do
           kind="error"
           inverse
           data-confirm={"Are you sure you want to delete #{@artist.name}?"}
-          phx-click="destroy_artist"
+          phx-click="destroy-artist"
         >
           Delete Artist
         </.button_link>
@@ -85,7 +85,7 @@ defmodule TunezWeb.Artists.ShowLive do
               inverse
               kind="error"
               data-confirm={"Are you sure you want to delete #{@album.name}?"}
-              phx-click="destroy_album"
+              phx-click="destroy-album"
               phx-value-id={@album.id}
             >
               Delete
@@ -171,11 +171,11 @@ defmodule TunezWeb.Artists.ShowLive do
     """
   end
 
-  def handle_event("destroy_artist", _params, socket) do
+  def handle_event("destroy-artist", _params, socket) do
     {:noreply, socket}
   end
 
-  def handle_event("destroy_album", _params, socket) do
+  def handle_event("destroy-album", _params, socket) do
     {:noreply, socket}
   end
 end
