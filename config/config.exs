@@ -11,6 +11,8 @@ config :mime,
   extensions: %{"json" => "application/vnd.api+json"},
   types: %{"application/vnd.api+json" => ["json"], "text/event-stream" => ["sse"]}
 
+config :langchain, :openai_key, fn -> System.fetch_env!("OPENAI_API_KEY") end
+
 # Configure the MCP Server
 config :tunez, :mcp_server, YourApp.MCPServer
 

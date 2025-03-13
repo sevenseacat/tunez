@@ -37,7 +37,6 @@ defmodule Tunez.Music.Artist do
     full_text do
       text(fn record ->
         """
-        Id: #{record.id}
         Name: #{record.name}
         Biography: #{record.biography}
         """
@@ -45,10 +44,7 @@ defmodule Tunez.Music.Artist do
     end
 
     attributes(name: :vectorized_name)
-  end
-
-  ai_agent do
-    expose([:create, :update, :destroy, :search, :vector_search])
+    embedding_model Tunez.OpenAIEmbeddingModel
   end
 
   resource do
@@ -82,6 +78,10 @@ defmodule Tunez.Music.Artist do
   end
 
   policies do
+    bypass AshAi.Checks.ActorIsAshAi do
+      authorize_if always()
+    end
+
     policy action(:create) do
       authorize_if actor_attribute_equals(:role, :admin)
     end

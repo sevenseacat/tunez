@@ -23,26 +23,27 @@ defmodule Tunez.Music.Album do
     end
   end
 
-  ai_agent do
-    expose([:create, :update, :destroy, :read, :vector_search])
-  end
-
   vectorize do
     full_text do
-      text(fn record ->
+      text fn record ->
         """
-        Id: #{record.id}
         Name: #{record.name}
         Year Released: #{record.year_released}
         """
-      end)
+      end
     end
 
-    attributes(name: :vectorized_name)
+    attributes name: :vectorized_name
+
+    embedding_model Tunez.OpenAIEmbeddingModel
   end
 
   actions do
     defaults [:read, :destroy]
+
+    read :get do
+      get_by [:id]
+    end
 
     create :create do
       accept [:name, :year_released, :cover_image_url, :artist_id]
@@ -54,6 +55,10 @@ defmodule Tunez.Music.Album do
   end
 
   policies do
+    bypass AshAi.Checks.ActorIsAshAi do
+      authorize_if always()
+    end
+
     bypass actor_attribute_equals(:role, :admin) do
       authorize_if always()
     end
@@ -129,6 +134,7 @@ defmodule Tunez.Music.Album do
 
   relationships do
     belongs_to :artist, Tunez.Music.Artist do
+      public? true
       allow_nil? false
     end
 

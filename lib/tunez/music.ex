@@ -1,5 +1,7 @@
 defmodule Tunez.Music do
-  use Ash.Domain, extensions: [AshGraphql.Domain, AshJsonApi.Domain, AshPhoenix]
+  use Ash.Domain,
+    otp_app: :tunez,
+    extensions: [AshGraphql.Domain, AshJsonApi.Domain, AshPhoenix, AshOps, AshAi]
 
   graphql do
     queries do
@@ -36,6 +38,28 @@ defmodule Tunez.Music do
     end
   end
 
+  mix_tasks do
+    create Tunez.Music.Album, :create_album, :create
+    list Tunez.Music.Album, :list_albums, :read
+    get Tunez.Music.Album, :get_album, :read
+  end
+
+  tools do
+    tool :create_artist, Tunez.Music.Artist, :create
+    tool :update_artist, Tunez.Music.Artist, :update
+    tool :destroy_artist, Tunez.Music.Artist, :destroy
+    tool :search_artists, Tunez.Music.Artist, :search
+    tool :vector_search_artists, Tunez.Music.Artist, :vector_search
+
+    tool :create_album, Tunez.Music.Album, :create
+    tool :update_album, Tunez.Music.Album, :update
+    tool :destroy_album, Tunez.Music.Album, :destroy
+    tool :search_albums, Tunez.Music.Album, :search
+    tool :vector_search_albums, Tunez.Music.Album, :vector_search
+
+    tool :analyze_sentiment, Tunez.Music.Actions, :analyze_sentiment
+  end
+
   resources do
     resource Tunez.Music.Artist do
       define :create_artist, action: :create
@@ -51,6 +75,11 @@ defmodule Tunez.Music do
       define :get_artist_by_id, action: :read, get_by: :id
       define :update_artist, action: :update
       define :destroy_artist, action: :destroy
+    end
+
+    resource Tunez.Music.Actions do
+      define :analyze_sentiment
+      define :analyze_artist_sentiment, args: [:artist_name]
     end
 
     resource Tunez.Music.Album do

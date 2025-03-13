@@ -8,16 +8,12 @@ defmodule Tunez.Repo.Migrations.AddThing do
   use Ecto.Migration
 
   def up do
-    drop constraint("tokens", "tokens_pkey")
-
     alter table(:tokens) do
       add :id, :uuid, null: false, default: fragment("gen_random_uuid()"), primary_key: true
     end
   end
 
   def down do
-    drop constraint("tokens", "tokens_pkey")
-
     alter table(:tokens) do
       remove :id
     end

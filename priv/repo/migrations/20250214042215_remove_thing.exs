@@ -8,8 +8,6 @@ defmodule Tunez.Repo.Migrations.RemoveThing do
   use Ecto.Migration
 
   def up do
-    drop constraint("tokens", "tokens_pkey")
-
     alter table(:tokens) do
       remove :id
     end
