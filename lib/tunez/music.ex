@@ -49,15 +49,18 @@ defmodule Tunez.Music do
     tool :update_artist, Tunez.Music.Artist, :update
     tool :destroy_artist, Tunez.Music.Artist, :destroy
     tool :search_artists, Tunez.Music.Artist, :search
+    tool :list_artists, Tunez.Music.Artist, :read
     tool :vector_search_artists, Tunez.Music.Artist, :vector_search
 
     tool :create_album, Tunez.Music.Album, :create
     tool :update_album, Tunez.Music.Album, :update
     tool :destroy_album, Tunez.Music.Album, :destroy
     tool :search_albums, Tunez.Music.Album, :search
+    tool :list_albums, Tunez.Music.Album, :read
     tool :vector_search_albums, Tunez.Music.Album, :vector_search
 
     tool :analyze_sentiment, Tunez.Music.Actions, :analyze_sentiment
+    tool :analyze_artist_sentiment, Tunez.Music.Actions, :analyze_artist_sentiment
   end
 
   resources do
@@ -79,7 +82,7 @@ defmodule Tunez.Music do
 
     resource Tunez.Music.Actions do
       define :analyze_sentiment
-      define :analyze_artist_sentiment, args: [:artist_name]
+      define :analyze_artist_sentiment, args: [:artist_id]
     end
 
     resource Tunez.Music.Album do

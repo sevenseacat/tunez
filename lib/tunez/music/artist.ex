@@ -35,16 +35,16 @@ defmodule Tunez.Music.Artist do
 
   vectorize do
     full_text do
-      text(fn record ->
+      text fn record ->
         """
         Name: #{record.name}
         Biography: #{record.biography}
         """
-      end)
+      end
     end
 
-    attributes(name: :vectorized_name)
-    embedding_model Tunez.OpenAIEmbeddingModel
+    attributes name: :vectorized_name
+    embedding_model(Tunez.OpenAIEmbeddingModel)
   end
 
   resource do
@@ -54,6 +54,10 @@ defmodule Tunez.Music.Artist do
   actions do
     defaults [:create, :read, :destroy]
     default_accept [:name, :biography]
+
+    read :by_id do
+      get_by [:id]
+    end
 
     read :search do
       description "List Artists, optionally filtering by name."

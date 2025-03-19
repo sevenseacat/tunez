@@ -27,19 +27,6 @@ defmodule TunezWeb.Router do
     plug :set_actor, :user
   end
 
-  pipeline :sse do
-    plug :accepts, ["sse"]
-    plug :ensure_session_id
-  end
-
-  scope "/" do
-    pipe_through :sse
-    get "/sse", SSE.ConnectionPlug, :call
-
-    pipe_through :api
-    post "/message", SSE.ConnectionPlug, :call
-  end
-
   scope "/", TunezWeb do
     pipe_through :browser
 

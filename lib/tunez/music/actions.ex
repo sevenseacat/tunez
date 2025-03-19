@@ -1,38 +1,44 @@
 defmodule Tunez.Music.Actions do
   use Ash.Resource, extensions: [AshAi], domain: Tunez.Music
 
-  actions do
-    action :analyze_sentiment, :atom do
-      constraints(one_of: [:positive, :negative])
+  defmodule Sentiment do
+    defstruct [:snippet, :analysis]
 
-      description("""
+    use Ash.Type.NewType,
+      subtype_of: :struct,
+      constraints: [
+        instance_of: __MODULE__,
+        fields: [
+          snippet: [type: :string, allow_nil?: false],
+          analysis: [
+            type: :atom,
+            constraints: [one_of: [:positive, :negative, :neutral]],
+            allow_nil?: false
+          ]
+        ]
+      ]
+  end
+
+  actions do
+    action :analyze_sentiment, {:array, Sentiment} do
+      description """
       Analyzes the sentiment of a given piece of text to determine 
       if it is overall positive or negative.
-      """)
+
+      Provide example text snippets and their sentiments.
+      """
 
       argument :text, :string do
-        allow_nil?(false)
-        description("The text for analysis")
+        allow_nil? false
+        description "The text for analysis"
       end
 
-      run(prompt(
-      LangChain.ChatModels.ChatOpenAI.new!(%{model: "gpt-4o"}), 
-      tools: true))
+      run prompt(LangChain.ChatModels.ChatOpenAI.new!(%{model: "gpt-4o"}), [])
     end
 
-    action :analyze_artist_sentiment, :atom do
-      constraints(one_of: [:positive, :negative])
-      argument(:artist_name, :string, allow_nil?: false)
-
-      description(
-        """
-        Analyze overall the sentiment of the info about an artists 
-        and all their related albums.
-        """
-      )
-
-      run( prompt( LangChain.ChatModels.ChatOpenAI.new!(%{ model: "gpt-4o" }), tools: true)
-      )
+    action :analyze_artist_sentiment, {:array, Sentiment} do
+      argument :artist_id, :uuid, allow_nil?: false
+      run Tunez.Music.AlbumAnalysis
     end
   end
 end

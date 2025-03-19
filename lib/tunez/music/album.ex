@@ -35,7 +35,7 @@ defmodule Tunez.Music.Album do
 
     attributes name: :vectorized_name
 
-    embedding_model Tunez.OpenAIEmbeddingModel
+    embedding_model(Tunez.OpenAIEmbeddingModel)
   end
 
   actions do
@@ -115,12 +115,12 @@ defmodule Tunez.Music.Album do
       public? true
     end
 
-    attribute :foo, :vector, constraints: [dimensions: 1523]
-
     attribute :year_released, :integer do
       allow_nil? false
       public? true
     end
+
+    attribute :description, :string
 
     attribute :cover_image_url, :string do
       public? true
