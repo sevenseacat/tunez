@@ -19,12 +19,12 @@ defmodule TunezWeb.Artists.ShowLiveTest do
 
       # conn
       # |> visit(~p"/artists/#{artist}")
-      # |> refute_has(clickable("destroy_artist"))
+      # |> refute_has(clickable("destroy-artist"))
 
       # conn
       # |> insert_and_authenticate_user(:admin)
       # |> visit(~p"/artists/#{artist}")
-      # |> assert_has(clickable("destroy_artist"))
+      # |> assert_has(clickable("destroy-artist"))
     end
 
     @tag skip: "Also need to change `_conn` to `conn` below"
@@ -91,7 +91,7 @@ defmodule TunezWeb.Artists.ShowLiveTest do
       # |> within("#album-#{album.id}", fn session ->
       #   session
       #   |> refute_has(link(~p"/albums/#{album}/edit"))
-      #   |> refute_has(clickable("destroy_album", album))
+      #   |> refute_has(clickable("destroy-album", album))
       # end)
 
       # # Admin user
@@ -101,7 +101,7 @@ defmodule TunezWeb.Artists.ShowLiveTest do
       # |> within("#album-#{album.id}", fn session ->
       #   session
       #   |> assert_has(link(~p"/albums/#{album}/edit"))
-      #   |> assert_has(clickable("destroy_album", album))
+      #   |> assert_has(clickable("destroy-album", album))
       # end)
     end
   end
