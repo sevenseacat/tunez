@@ -50,7 +50,7 @@ defmodule TunezWeb.CoreComponents do
       phx-click={JS.push("lv:clear-flash", value: %{key: @kind}) |> hide("##{@id}")}
       role="alert"
       class={[
-        "relative",
+        "relative flash-#{@kind}",
         "w-80 sm:w-96 shadow-lg mb-2 border-0 border-l-4 bg-white cursor-pointer rounded-lg p-4",
         @kind == :info && "border-green-600",
         @kind == :error && "border-error-600",
