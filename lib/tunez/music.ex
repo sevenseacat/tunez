@@ -60,6 +60,7 @@ defmodule Tunez.Music do
     tool :vector_search_albums, Tunez.Music.Album, :vector_search
 
     tool :analyze_sentiment, Tunez.Music.Actions, :analyze_sentiment
+    tool :get_artist_info, Tunez.Music.Actions, :get_artist_info
     tool :analyze_artist_sentiment, Tunez.Music.Actions, :analyze_artist_sentiment
   end
 

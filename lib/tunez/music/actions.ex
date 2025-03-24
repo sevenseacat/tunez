@@ -36,9 +36,37 @@ defmodule Tunez.Music.Actions do
       run prompt(LangChain.ChatModels.ChatOpenAI.new!(%{model: "gpt-4o"}), [])
     end
 
+    action :get_artist_info, :string do
+      argument :artist_id, :uuid, allow_nil?: false
+
+      run fn input, _ -> 
+        artist = Tunez.Music.get_artist_by_id!(input.arguments.artist_id, load: :albums)
+
+        {:ok, EEx.eval_string(
+        """
+        # Artist: <%= @artist.name %>
+
+        ## Biography
+        <%= @artist.biography %>
+        
+        ## Albums
+        <%= for album <- @artist.albums do %>
+        ### <%= album.name %>
+        <%= album.description %>
+        <% end %>
+        """, assigns: %{artist: artist})}
+      end
+      
+
+    end
+
     action :analyze_artist_sentiment, {:array, Sentiment} do
       argument :artist_id, :uuid, allow_nil?: false
-      run Tunez.Music.AlbumAnalysis
+      description  """
+      Analyzes the sentiment of the given artist_id.
+      """
+
+      run prompt(LangChain.ChatModels.ChatOpenAI.new!(%{model: "gpt-4o"}), [tools: :get_artist_info])
     end
   end
 end
