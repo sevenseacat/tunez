@@ -25,7 +25,7 @@ defmodule Tunez.Music.Actions do
       Analyzes the sentiment of a given piece of text to determine 
       if it is overall positive or negative.
 
-      Provide example text snippets and their sentiments.
+      Provides example text snippets and their sentiments.
       """
 
       argument :text, :string do
