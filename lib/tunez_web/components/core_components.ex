@@ -425,7 +425,7 @@ defmodule TunezWeb.CoreComponents do
 
   def form_input_styles do
     [
-      "my-2 block w-full rounded-lg text-zinc-900 focus:ring focus:outline-none sm:leading-6",
+      "my-2 block w-full rounded-lg text-zinc-900 focus:ring-3 focus:outline-hidden sm:leading-6",
       "border-zinc-300 focus:border-zinc-400 focus:ring-zinc-100",
       "error:border-error-400 error:focus:border-error-600 error:focus:ring-error-100",
       "disabled:bg-gray-100 disabled:text-zinc-400"
@@ -522,7 +522,7 @@ defmodule TunezWeb.CoreComponents do
           tabindex="0"
           class={[
             @responsive &&
-              "max-sm:hidden max-sm:absolute max-sm:right-0 max-sm:bg-white max-sm:shadow max-sm:rounded sm:!block"
+              "max-sm:hidden max-sm:absolute max-sm:right-0 max-sm:bg-white max-sm:shadow-sm max-sm:rounded-sm sm:!block"
           ]}
         >
           <div class={[

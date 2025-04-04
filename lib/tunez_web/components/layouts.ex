@@ -31,7 +31,7 @@ defmodule TunezWeb.Layouts do
           <ul
             id="user-menu"
             tabindex="0"
-            class="hidden z-[1] p-2 mt-3 shadow rounded-box w-fit-content absolute right-0 bg-white text-sm"
+            class="hidden z-[1] p-2 mt-3 shadow-sm rounded-box w-fit-content absolute right-0 bg-white text-sm"
           >
             <li class="border-b border-base-200 p-2 pt-0">
               <p>

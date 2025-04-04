@@ -18,14 +18,14 @@ defmodule TunezWeb.Notifications do
         </span>
       </div>
       <div id="notifications" class="hidden absolute top-10 right-0 bg">
-        <div :if={@notifications == []} class="z-[1] p-2 shadow bg-white rounded-box w-52">
+        <div :if={@notifications == []} class="z-[1] p-2 shadow-sm bg-white rounded-box w-52">
           <.icon name="hero-check-circle" class="w-8 h-8 bg-green-500" />
           <span class="text-sm px-2">No new notifications!</span>
         </div>
         <ul
           :if={@notifications != []}
           tabindex="0"
-          class="menu menu-sm z-[1] p-2 shadow bg-base-100 rounded-box w-80"
+          class="menu menu-sm z-[1] p-2 shadow-sm bg-base-100 rounded-box w-80"
         >
           <li
             :for={notification <- @notifications}
