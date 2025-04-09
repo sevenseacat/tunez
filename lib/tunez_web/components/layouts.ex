@@ -16,7 +16,7 @@ defmodule TunezWeb.Layouts do
     ~H"""
     <div class="flex space-x-3 relative items-center">
       <%= if @current_user do %>
-        <.live_component module={TunezWeb.Notifications} id={:notifications} notifications={[]} />
+        {live_render(@socket, TunezWeb.NotificationsLive, sticky: true, id: :notifications_container)}
 
         <div class="!ml-8">
           <div

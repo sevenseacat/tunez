@@ -3,13 +3,13 @@ defmodule TunezWeb.Graphql.UserTest do
 
   describe "queries" do
     @tag :skip
-    test "signInWithPassword" do
+    test "signInUser" do
       # user = generate(user(email: "test@test.com", password: "password"))
 
       # assert {:ok, resp} =
       #          """
-      #          query signInWithPassword($email: String!, $password: String!) {
-      #            signInWithPassword(email: $email, password: $password) {
+      #          query signInUser($email: String!, $password: String!) {
+      #            signInUser(email: $email, password: $password) {
       #              id
       #              token
       #            }
@@ -19,7 +19,7 @@ defmodule TunezWeb.Graphql.UserTest do
       #            variables: %{"email" => "test@test.com", "password" => "password"}
       #          )
 
-      # result = resp.data["signInWithPassword"]
+      # result = resp.data["signInUser"]
       # assert result["id"] == user.id
       # assert result["token"] != nil
     end
@@ -27,11 +27,11 @@ defmodule TunezWeb.Graphql.UserTest do
 
   describe "mutations" do
     @tag :skip
-    test "registerWithPassword" do
+    test "registerUser" do
       # assert {:ok, resp} =
       #          """
-      #          mutation registerWithPassword($input: RegisterWithPasswordInput!) {
-      #            registerWithPassword(input: $input) {
+      #          mutation registerUser($input: RegisterUserInput!) {
+      #            registerUser(input: $input) {
       #              errors { message }
       #              metadata { token }
       #              result { id }
@@ -48,7 +48,7 @@ defmodule TunezWeb.Graphql.UserTest do
       #            }
       #          )
 
-      # data = resp.data["registerWithPassword"]
+      # data = resp.data["registerUser"]
       # assert Enum.empty?(data["errors"])
       # assert data["metadata"]["token"] != nil
       # assert data["result"]["id"] != nil

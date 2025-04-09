@@ -1,5 +1,6 @@
 defmodule TunezWeb.Music.AlbumTest do
   use Tunez.DataCase, async: true
+  # use Oban.Testing, repo: Tunez.Repo
 
   alias Tunez.Accounts.Notification, warn: false
   alias Tunez.Music, warn: false
@@ -20,7 +21,8 @@ defmodule TunezWeb.Music.AlbumTest do
       # assert album.updated_by_id == actor.id
     end
 
-    @tag skip: "can be enabled during chapter 9"
+    @tag skip: "can be enabled during chapter 10. Also need to uncomment `use Oban.Testing`
+      at the top of this module"
     test "queues a job to send notifications" do
       # actor = generate(user(role: :admin))
       # artist = generate(artist())
@@ -31,7 +33,7 @@ defmodule TunezWeb.Music.AlbumTest do
       #     actor: actor
       #   )
 
-      # assert_enqueued(queue: "album_notifications", args: %{primary_key: %{id: album.id}})
+      # assert_enqueued(args: %{primary_key: %{id: album.id}})
     end
   end
 
@@ -49,45 +51,47 @@ defmodule TunezWeb.Music.AlbumTest do
   end
 
   describe "Tunez.Music.destroy_album/1-2" do
-    @tag skip: "can be enabled during chapter 9"
+    @tag skip: "can be enabled during chapter 10"
     test "deletes any notifications about the album" do
-      # album = generate(album())
+      # editor = generate(user(role: :editor))
+      # album = generate(album(actor: editor))
       # %{id: to_stay_id} = generate(notification())
       # _to_go = generate(notification(album_id: album.id))
 
-      # Music.destroy_album!(album, authorize?: false)
+      # Music.destroy_album!(album, actor: editor)
 
-      # notifications = Notification.read!()
+      # notifications = Ash.read!(Tunez.Accounts.Notification, authorize?: false)
 
       # assert length(notifications) == 1
       # assert Enum.map(notifications, & &1.id) == [to_stay_id]
     end
 
-    @tag skip: "can be enabled during chapter 9"
+    @tag skip: "can be enabled during chapter 10"
     test "sends pubsub notifications about the notification deletion" do
       # follower = generate(user())
       # album = generate(album())
       # %{id: notification_id} = generate(notification(album_id: album.id, user_id: follower.id))
-      # TunezWeb.Endpoint.subscribe("notifications:#{follower.id}:destroy")
+      # TunezWeb.Endpoint.subscribe("notifications:#{follower.id}")
 
       # Music.destroy_album!(album, authorize?: false)
 
       # assert_received %Phoenix.Socket.Broadcast{
-      #   payload: %{data: %{id: ^notification_id}, action: %{name: :destroy}}
+      #   payload: %{id: ^notification_id}
       # }
     end
   end
 
   describe "send_new_album_notifications" do
-    @tag skip: "can be enabled during chapter 9"
+    @tag skip: "can be enabled during chapter 10"
     test "creates and sends notifications for followers of the album's artist" do
       # artist = generate(artist())
       # [follower, _nonfollower] = generate_many(user(), 2)
-      # TunezWeb.Endpoint.subscribe("notifications:#{follower.id}:create")
+      # TunezWeb.Endpoint.subscribe("notifications:#{follower.id}")
 
       # Music.follow_artist!(artist, actor: follower)
 
       # %{id: album_id} = album = generate(album(artist_id: artist.id))
+      # %{id: follower_id} = follower
 
       # # Mimic running the action as an Oban job
       # album
@@ -95,16 +99,15 @@ defmodule TunezWeb.Music.AlbumTest do
       # |> Ash.Changeset.put_context(:private, %{ash_oban?: true})
       # |> Ash.update!()
 
-      # notifications = Notification.read!()
+      # notifications = Ash.read!(Notification, authorize?: false)
       # assert length(notifications) == 1
       # notification = hd(notifications)
 
       # assert notification.user_id == follower.id
       # assert notification.album_id == album.id
-      # assert notification.dismissed_at == nil
 
       # assert_received(%Phoenix.Socket.Broadcast{
-      #   payload: %{data: %{album_id: ^album_id}, action: %{name: :create}}
+      #   payload: %{album_id: ^album_id, user_id: ^follower_id}
       # })
     end
   end

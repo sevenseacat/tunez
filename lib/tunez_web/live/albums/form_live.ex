@@ -76,6 +76,7 @@ defmodule TunezWeb.Albums.FormLive do
                 size="xs"
                 inverse
               >
+                <span class="hidden">Delete</span>
                 <.icon name="hero-trash" class="size-5" />
               </.button_link>
             </td>

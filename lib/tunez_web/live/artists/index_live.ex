@@ -56,7 +56,7 @@ defmodule TunezWeb.Artists.IndexLive do
         <.cover_image />
       </.link>
     </div>
-    <p>
+    <p class="flex justify-between">
       <.link
         navigate={~p"/artists/#{@artist.id}"}
         class="text-lg font-semibold"
@@ -75,6 +75,24 @@ defmodule TunezWeb.Artists.IndexLive do
     <span class="mt-2 text-sm leading-6 text-zinc-500">
       {@artist.album_count} {ngettext("album", "albums", @artist.album_count)},
       latest release {@artist.latest_album_year_released}
+    </span>
+    """
+  end
+
+  def follow_icon(assigns) do
+    ~H"""
+    <.icon name="hero-star-solid" class="w-8 h-8 bg-yellow-400 absolute top-2 right-2" />
+    """
+  end
+
+  def follower_count_display(assigns) do
+    ~H"""
+    <span
+      :if={@count > 0}
+      data-role="follower-count"
+      class="text-zinc-500 text-sm whitespace-nowrap pt-1 pl-1"
+    >
+      <.icon name="hero-star" class="size-4 -mt-0.5" /> {round_count(@count)}
     </span>
     """
   end
@@ -161,5 +179,13 @@ defmodule TunezWeb.Artists.IndexLive do
   def handle_event("search", %{"query" => query}, socket) do
     params = remove_empty(%{q: query})
     {:noreply, push_patch(socket, to: ~p"/?#{params}")}
+  end
+
+  def round_count(number) do
+    case number do
+      n when n >= 1_000_000 -> "#{Float.round(n / 1_000_000, 1)}M"
+      n when n >= 1_000 -> "#{Float.round(n / 1_000, 1)}K"
+      n -> n
+    end
   end
 end

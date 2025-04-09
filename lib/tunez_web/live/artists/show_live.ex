@@ -134,13 +134,13 @@ defmodule TunezWeb.Artists.ShowLive do
         JS.push("unfollow")
       else
         JS.push("follow")
-        |> JS.transition("animate-ping")
+        |> JS.transition("animate-spin")
       end
 
     assigns = assign(assigns, :event, event)
 
     ~H"""
-    <span phx-click={@event} data-id={@artist_id} class="ml-3 inline-block">
+    <span phx-click={@event} class="ml-3 inline-block">
       <.icon
         name={if @on, do: "hero-star-solid", else: "hero-star"}
         class="w-8 h-8 bg-yellow-400 -mt-1.5 cursor-pointer"
@@ -149,33 +149,19 @@ defmodule TunezWeb.Artists.ShowLive do
     """
   end
 
-  def updated_by(assigns) do
-    ~H"""
-    <div class="italic text-xs text-slate-500 my-5">
-      Last updated by:
-      <.user_with_avatar user={@record.updated_by} />, {time_ago_in_words(@record.updated_at)}
-    </div>
-    """
-  end
-
-  def user_with_avatar(%{user: %{username: _}} = assigns) do
-    ~H"""
-    <.avatar user={@user} class="align-middle" />
-    <strong>{@user.username}</strong>
-    """
-  end
-
-  def user_with_avatar(assigns) do
-    ~H"""
-    unknown
-    """
-  end
-
   def handle_event("destroy-artist", _params, socket) do
     {:noreply, socket}
   end
 
   def handle_event("destroy-album", _params, socket) do
+    {:noreply, socket}
+  end
+
+  def handle_event("follow", _params, socket) do
+    {:noreply, socket}
+  end
+
+  def handle_event("unfollow", _params, socket) do
     {:noreply, socket}
   end
 end

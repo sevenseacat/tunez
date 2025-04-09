@@ -9,8 +9,8 @@ defmodule TunezWeb.JsonApi.UserTest do
 
     # response =
     #   post(
-    #     Tunez.Acccounts,
-    #     "/users/sign_in",
+    #     Tunez.Accounts,
+    #     "/users/sign-in",
     #     %{
     #       data: %{attributes: %{email: "one@example.com", password: "password"}}
     #     },
