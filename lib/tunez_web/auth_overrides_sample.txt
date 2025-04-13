@@ -18,7 +18,7 @@ override Components.Password.Input do
 
   set :input_class_with_error, [
     TunezWeb.CoreComponents.form_input_styles(),
-    "!border-error-400 focus:border-error-600 focus:ring-error-100"
+    "!border-error-400 focus:!border-error-600 focus:!ring-error-100"
   ]
 
   set :submit_class, [

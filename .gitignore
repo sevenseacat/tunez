@@ -37,3 +37,6 @@ npm-debug.log
 
 # Ignore macOS-generated files
 .DS_Store
+
+# Editor-generated files
+.elixir_ls
