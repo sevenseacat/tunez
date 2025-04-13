@@ -83,11 +83,11 @@ defmodule TunezWeb.Artists.IndexLiveTest do
       # conn
       # |> visit(~p"/")
       # |> assert_ordered_artists(["alpha", "omega", "beta", "gamma"])
-      # |> select("number of albums", from: "sort by:")
+      # |> select("sort by:", option: "number of albums")
       # |> assert_ordered_artists(["beta", "alpha", "gamma", "omega"])
-      # |> select("name", from: "sort by:")
+      # |> select("sort by:", option: "name")
       # |> assert_ordered_artists(["alpha", "beta", "gamma", "omega"])
-      # |> select("latest album release", from: "sort by:")
+      # |> select("sort by:", option: "latest album release")
       # |> assert_ordered_artists(["gamma", "alpha", "beta", "omega"])
     end
 
