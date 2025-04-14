@@ -20,9 +20,24 @@ defmodule Tunez.Music.Actions do
   end
 
   actions do
+    action :scan_for_products, {:array, MyApp.Types.ProductInfo} do
+      description """
+      Scans a given html page for product information, extracting their name and price.
+
+      The name should include any disambiguation, i.e `banana (large)` if present.
+      """
+
+      argument :page_contents, :string do
+        allow_nil? false
+        description "The raw contents of the HTML page"
+      end
+
+      run prompt(LangChain.ChatModels.ChatOpenAI.new!(%{ model: "gpt-4o"}))
+    end
+
     action :analyze_sentiment, {:array, Sentiment} do
       description """
-      Analyzes the sentiment of a given piece of text to determine 
+      Analyzes the sentiment of a given piece of text to determine
       if it is overall positive or negative.
 
       Provides example text snippets and their sentiments.
@@ -36,10 +51,19 @@ defmodule Tunez.Music.Actions do
       run prompt(LangChain.ChatModels.ChatOpenAI.new!(%{model: "gpt-4o"}), [])
     end
 
+    action :analyze_artist_sentiment, {:array, Sentiment} do
+      argument :artist_id, :uuid, allow_nil?: false
+      description  """
+      Analyzes the sentiment of the given artist_id.
+      """
+
+      run prompt(LangChain.ChatModels.ChatOpenAI.new!(%{model: "gpt-4o"}), [tools: :get_artist_info])
+    end
+
     action :get_artist_info, :string do
       argument :artist_id, :uuid, allow_nil?: false
 
-      run fn input, _ -> 
+      run fn input, _ ->
         artist = Tunez.Music.get_artist_by_id!(input.arguments.artist_id, load: :albums)
 
         {:ok, EEx.eval_string(
@@ -48,7 +72,7 @@ defmodule Tunez.Music.Actions do
 
         ## Biography
         <%= @artist.biography %>
-        
+
         ## Albums
         <%= for album <- @artist.albums do %>
         ### <%= album.name %>
@@ -56,17 +80,6 @@ defmodule Tunez.Music.Actions do
         <% end %>
         """, assigns: %{artist: artist})}
       end
-      
-
-    end
-
-    action :analyze_artist_sentiment, {:array, Sentiment} do
-      argument :artist_id, :uuid, allow_nil?: false
-      description  """
-      Analyzes the sentiment of the given artist_id.
-      """
-
-      run prompt(LangChain.ChatModels.ChatOpenAI.new!(%{model: "gpt-4o"}), [tools: :get_artist_info])
     end
   end
 end

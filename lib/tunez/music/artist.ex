@@ -129,6 +129,8 @@ defmodule Tunez.Music.Artist do
     attribute :biography, :string do
       public? true
     end
+    
+    attribute :description, :string
 
     attribute :previous_names, {:array, :string} do
       default []
