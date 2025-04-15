@@ -24,7 +24,7 @@ override Components.Password.Input do
   set :submit_class, [
     "phx-submit-loading:opacity-75 my-4 py-3 px-5 text-sm",
     "bg-primary-600 hover:bg-primary-700 text-white",
-    "rounded-lg font-medium leading-none"
+    "rounded-lg font-medium leading-none cursor-pointer"
   ]
 
   set :error_ul, "mt-2 flex gap-2 text-sm leading-6 text-error-600"
@@ -32,4 +32,12 @@ end
 
 override Components.MagicLink do
   set :request_flash_text, "Check your email for a sign-in link!"
+end
+
+override Components.Confirm.Input do
+  set :submit_class, [
+    "phx-submit-loading:opacity-75 my-8 mx-auto py-3 px-5 text-sm",
+    "bg-primary-600 hover:bg-primary-700 text-white",
+    "rounded-lg font-medium leading-none block cursor-pointer"
+  ]
 end
