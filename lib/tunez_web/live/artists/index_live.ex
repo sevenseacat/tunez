@@ -27,25 +27,27 @@ defmodule TunezWeb.Artists.IndexLive do
 
   def render(assigns) do
     ~H"""
-    <.header responsive={false}>
-      <.h1>Artists</.h1>
-      <:action>
-        <.button_link navigate={~p"/artists/new"} kind="primary">
-          New Artist
-        </.button_link>
-      </:action>
-    </.header>
+    <Layouts.app {assigns}>
+      <.header responsive={false}>
+        <.h1>Artists</.h1>
+        <:action>
+          <.button_link navigate={~p"/artists/new"} kind="primary">
+            New Artist
+          </.button_link>
+        </:action>
+      </.header>
 
-    <div :if={@artists == []} class="p-8 text-center">
-      <.icon name="hero-face-frown" class="w-32 h-32 bg-gray-300" />
-      <br /> No artist data to display!
-    </div>
+      <div :if={@artists == []} class="p-8 text-center">
+        <.icon name="hero-face-frown" class="w-32 h-32 bg-gray-300" />
+        <br /> No artist data to display!
+      </div>
 
-    <ul class="gap-6 lg:gap-12 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4">
-      <li :for={artist <- @artists}>
-        <.artist_card artist={artist} />
-      </li>
-    </ul>
+      <ul class="gap-6 lg:gap-12 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4">
+        <li :for={artist <- @artists}>
+          <.artist_card artist={artist} />
+        </li>
+      </ul>
+    </Layouts.app>
     """
   end
 

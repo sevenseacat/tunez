@@ -38,9 +38,7 @@ defmodule TunezWeb do
 
   def controller do
     quote do
-      use Phoenix.Controller,
-        formats: [:html, :json],
-        layouts: [html: TunezWeb.Layouts]
+      use Phoenix.Controller, formats: [:html, :json]
 
       import Plug.Conn
       use Gettext, backend: TunezWeb.Gettext
@@ -51,8 +49,7 @@ defmodule TunezWeb do
 
   def live_view do
     quote do
-      use Phoenix.LiveView,
-        layout: {TunezWeb.Layouts, :app}
+      use Phoenix.LiveView
 
       unquote(html_helpers())
     end
@@ -95,8 +92,9 @@ defmodule TunezWeb do
       import TunezWeb.CoreComponents
       use Gettext, backend: TunezWeb.Gettext
 
-      # Shortcut for generating JS commands
+      # Common modules used in templates
       alias Phoenix.LiveView.JS
+      alias TunezWeb.Layouts
 
       # Routes generation with the ~p sigil
       unquote(verified_routes())

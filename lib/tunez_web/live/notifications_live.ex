@@ -3,7 +3,7 @@ defmodule TunezWeb.NotificationsLive do
 
   def mount(_params, _session, socket) do
     notifications = []
-    {:ok, assign(socket, notifications: notifications), layout: false}
+    {:ok, assign(socket, notifications: notifications)}
   end
 
   def render(assigns) do

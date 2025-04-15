@@ -14,24 +14,26 @@ defmodule TunezWeb.Artists.FormLive do
 
   def render(assigns) do
     ~H"""
-    <.header>
-      <.h1>{@page_title}</.h1>
-    </.header>
+    <Layouts.app {assigns}>
+      <.header>
+        <.h1>{@page_title}</.h1>
+      </.header>
 
-    <.simple_form
-      :let={form}
-      id="artist_form"
-      as={:form}
-      for={@form}
-      phx-change="validate"
-      phx-submit="save"
-    >
-      <.input field={form[:name]} label="Name" />
-      <.input field={form[:biography]} type="textarea" label="Biography" />
-      <:actions>
-        <.button type="primary">Save</.button>
-      </:actions>
-    </.simple_form>
+      <.simple_form
+        :let={form}
+        id="artist_form"
+        as={:form}
+        for={@form}
+        phx-change="validate"
+        phx-submit="save"
+      >
+        <.input field={form[:name]} label="Name" />
+        <.input field={form[:biography]} type="textarea" label="Biography" />
+        <:actions>
+          <.button type="primary">Save</.button>
+        </:actions>
+      </.simple_form>
+    </Layouts.app>
     """
   end
 

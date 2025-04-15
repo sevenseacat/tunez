@@ -12,6 +12,31 @@ defmodule TunezWeb.Layouts do
 
   embed_templates "layouts/*"
 
+  def app(assigns) do
+    ~H"""
+    <div class="w-full max-w-6xl m-auto">
+      <div class="flex items-center w-full p-4 pb-2 border-b-2 border-primary-600">
+        <div class="flex-1 mr-4">
+          <.link navigate={~p"/"}>
+            <.icon
+              name="hero-musical-note-solid"
+              class="w-8 h-8 bg-accent-400 inline-block align-middle"
+            />
+            <span class="text-2xl font-bold text-accent-400 inline-block align-middle mb-1 ml-1">
+              Tunez
+            </span>
+          </.link>
+        </div>
+      </div>
+      <div class="px-4">
+        <.flash_group flash={@flash} />
+
+        {render_slot(@inner_block)}
+      </div>
+    </div>
+    """
+  end
+
   def user_info(assigns) do
     ~H"""
     <div class="flex space-x-3 relative items-center">

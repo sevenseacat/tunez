@@ -34,37 +34,39 @@ defmodule TunezWeb.Artists.ShowLive do
 
   def render(assigns) do
     ~H"""
-    <.header>
-      <.h1>
-        {@artist.name}
-      </.h1>
-      <:action>
-        <.button_link
-          kind="error"
-          inverse
-          data-confirm={"Are you sure you want to delete #{@artist.name}?"}
-          phx-click="destroy-artist"
-        >
-          Delete Artist
-        </.button_link>
-      </:action>
-      <:action>
-        <.button_link navigate={~p"/artists/#{@artist.id}/edit"} kind="primary" inverse>
-          Edit Artist
-        </.button_link>
-      </:action>
-    </.header>
-    <div class="mb-6">{formatted(@artist.biography)}</div>
+    <Layouts.app {assigns}>
+      <.header>
+        <.h1>
+          {@artist.name}
+        </.h1>
+        <:action>
+          <.button_link
+            kind="error"
+            inverse
+            data-confirm={"Are you sure you want to delete #{@artist.name}?"}
+            phx-click="destroy-artist"
+          >
+            Delete Artist
+          </.button_link>
+        </:action>
+        <:action>
+          <.button_link navigate={~p"/artists/#{@artist.id}/edit"} kind="primary" inverse>
+            Edit Artist
+          </.button_link>
+        </:action>
+      </.header>
+      <div class="mb-6">{formatted(@artist.biography)}</div>
 
-    <.button_link navigate={~p"/artists/#{@artist.id}/albums/new"} kind="primary">
-      New Album
-    </.button_link>
+      <.button_link navigate={~p"/artists/#{@artist.id}/albums/new"} kind="primary">
+        New Album
+      </.button_link>
 
-    <ul class="mt-10 space-y-6 md:space-y-10">
-      <li :for={album <- @albums}>
-        <.album_details album={album} />
-      </li>
-    </ul>
+      <ul class="mt-10 space-y-6 md:space-y-10">
+        <li :for={album <- @albums}>
+          <.album_details album={album} />
+        </li>
+      </ul>
+    </Layouts.app>
     """
   end
 

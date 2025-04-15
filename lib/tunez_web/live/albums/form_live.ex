@@ -14,31 +14,33 @@ defmodule TunezWeb.Albums.FormLive do
 
   def render(assigns) do
     ~H"""
-    <.header>
-      <.h1>{@page_title}</.h1>
-    </.header>
+    <Layouts.app {assigns}>
+      <.header>
+        <.h1>{@page_title}</.h1>
+      </.header>
 
-    <.simple_form
-      :let={form}
-      id="album_form"
-      as={:form}
-      for={@form}
-      phx-change="validate"
-      phx-submit="save"
-    >
-      <.input name="artist_id" label="Artist" value="" disabled />
-      <div class="sm:flex gap-8 space-y-8 md:space-y-0">
-        <div class="sm:w-3/4"><.input field={form[:name]} label="Name" /></div>
-        <div class="sm:w-1/4">
-          <.input field={form[:year_released]} label="Year Released" type="number" />
+      <.simple_form
+        :let={form}
+        id="album_form"
+        as={:form}
+        for={@form}
+        phx-change="validate"
+        phx-submit="save"
+      >
+        <.input name="artist_id" label="Artist" value="" disabled />
+        <div class="sm:flex gap-8 space-y-8 md:space-y-0">
+          <div class="sm:w-3/4"><.input field={form[:name]} label="Name" /></div>
+          <div class="sm:w-1/4">
+            <.input field={form[:year_released]} label="Year Released" type="number" />
+          </div>
         </div>
-      </div>
-      <.input field={form[:cover_image_url]} label="Cover Image URL" />
+        <.input field={form[:cover_image_url]} label="Cover Image URL" />
 
-      <:actions>
-        <.button type="primary">Save</.button>
-      </:actions>
-    </.simple_form>
+        <:actions>
+          <.button type="primary">Save</.button>
+        </:actions>
+      </.simple_form>
+    </Layouts.app>
     """
   end
 
