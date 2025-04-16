@@ -43,7 +43,7 @@ config :esbuild,
 
 # Configure tailwind (the version is required)
 config :tailwind,
-  version: "4.1.1",
+  version: "4.1.4",
   tunez: [
     args: ~w(
       --input=assets/css/app.css

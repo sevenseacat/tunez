@@ -58,7 +58,7 @@ defmodule Tunez.MixProject do
       {:telemetry_poller, "~> 1.0"},
       {:gettext, "~> 0.26 and >= 0.26.1"},
       {:jason, "~> 1.2"},
-      {:dns_cluster, "~> 0.1.1"},
+      {:dns_cluster, "~> 0.2"},
       {:bandit, "~> 1.5"},
       {:igniter, "~> 0.3", only: [:dev]},
       {:phoenix_test, github: "germsvel/phoenix_test", only: :test, runtime: false}
