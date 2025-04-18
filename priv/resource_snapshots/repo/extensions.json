@@ -2,6 +2,7 @@
   "ash_functions_version": 5,
   "installed": [
     "ash-functions",
-    "pg_trgm"
+    "pg_trgm",
+    "citext"
   ]
 }
