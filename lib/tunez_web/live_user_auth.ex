@@ -36,4 +36,19 @@ defmodule TunezWeb.LiveUserAuth do
       {:cont, assign(socket, :current_user, nil)}
     end
   end
+
+  def on_mount([role_required: role_required], _, _, socket) do
+    current_user = socket.assigns[:current_user]
+
+    if current_user && current_user.role == role_required do
+      {:cont, socket}
+    else
+      socket =
+        socket
+        |> Phoenix.LiveView.put_flash(:error, "Unauthorized!")
+        |> Phoenix.LiveView.redirect(to: ~p"/")
+
+      {:halt, socket}
+    end
+  end
 end
