@@ -5,6 +5,7 @@
 @source "../css";
 @source "../js";
 @source "../../lib/tunez_web";
+@source "../../deps/ash_authentication_phoenix";
 
 @plugin "@tailwindcss/forms";
 
