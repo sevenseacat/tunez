@@ -3,7 +3,7 @@ defmodule Tunez.Accounts.User do
     otp_app: :tunez,
     domain: Tunez.Accounts,
     authorizers: [Ash.Policy.Authorizer],
-    extensions: [AshAuthentication],
+    extensions: [AshJsonApi.Resource, AshAuthentication],
     data_layer: AshPostgres.DataLayer
 
   authentication do
@@ -42,7 +42,18 @@ defmodule Tunez.Accounts.User do
           request_password_reset_action_name :request_password_reset_token
         end
       end
+
+      magic_link do
+        identity_field :email
+        registration_enabled? true
+
+        sender Tunez.Accounts.User.Senders.SendMagicLinkEmail
+      end
     end
+  end
+
+  json_api do
+    type "user"
   end
 
   postgres do
@@ -225,6 +236,34 @@ defmodule Tunez.Accounts.User do
       # Generates an authentication token for the user
       change AshAuthentication.GenerateTokenChange
     end
+
+    create :sign_in_with_magic_link do
+      description "Sign in or register a user with magic link."
+
+      argument :token, :string do
+        description "The token from the magic link that was sent to the user"
+        allow_nil? false
+      end
+
+      upsert? true
+      upsert_identity :unique_email
+      upsert_fields [:email]
+
+      # Uses the information from the token to create or sign in the user
+      change AshAuthentication.Strategy.MagicLink.SignInChange
+
+      metadata :token, :string do
+        allow_nil? false
+      end
+    end
+
+    action :request_magic_link do
+      argument :email, :ci_string do
+        allow_nil? false
+      end
+
+      run AshAuthentication.Strategy.MagicLink.Request
+    end
   end
 
   policies do
@@ -246,7 +285,6 @@ defmodule Tunez.Accounts.User do
     end
 
     attribute :hashed_password, :string do
-      allow_nil? false
       sensitive? true
     end
 
