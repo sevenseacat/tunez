@@ -29,14 +29,14 @@ defmodule Tunez.Music.Album do
     create :create do
       accept [:name, :year_released, :cover_image_url, :artist_id]
       argument :tracks, {:array, :map}
-      change manage_relationship(:tracks, type: :direct_control)
+      change manage_relationship(:tracks, type: :direct_control, order_is_key: :order)
     end
 
     update :update do
       accept [:name, :year_released, :cover_image_url]
       require_atomic? false
       argument :tracks, {:array, :map}
-      change manage_relationship(:tracks, type: :direct_control)
+      change manage_relationship(:tracks, type: :direct_control, order_is_key: :order)
     end
   end
 
