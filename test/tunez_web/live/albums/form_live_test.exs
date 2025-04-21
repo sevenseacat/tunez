@@ -29,31 +29,29 @@ defmodule TunezWeb.Albums.FormLiveTest do
       assert album.artist_id == artist.id
     end
 
-    @tag skip: "Can be enabled during chapter 8.
-      Also need to change `_conn` to `conn` below"
-    test "track data can be added and removed for an album", %{conn: _conn} do
-      # artist = generate(artist())
+    test "track data can be added and removed for an album", %{conn: conn} do
+      artist = generate(artist())
 
-      # conn
-      # |> insert_and_authenticate_user(:admin)
-      # |> visit(~p"/artists/#{artist}/albums/new")
-      # |> fill_in("Name", with: "Sample With Tracks")
-      # |> fill_in("Year Released", with: 2021)
-      # |> click_link("Add Track")
-      # |> click_link("Add Track")
-      # |> click_link("Add Track")
-      # |> fill_in("tr[data-id=0] input", "Name", with: "First Track")
-      # |> fill_in("tr[data-id=0] input", "Duration", with: "2:22")
-      # |> fill_in("tr[data-id=1] input", "Name", with: "Second Track")
-      # |> fill_in("tr[data-id=1] input", "Duration", with: "3:33")
-      # |> fill_in("tr[data-id=2] input", "Name", with: "Third Track")
-      # |> fill_in("tr[data-id=2] input", "Duration", with: "4:44")
-      # |> click_link("tr[data-id=1] a", "Delete")
-      # |> click_button("Save")
-      # |> assert_has(flash(:info), text: "Album saved successfully")
+      conn
+      |> insert_and_authenticate_user(:admin)
+      |> visit(~p"/artists/#{artist}/albums/new")
+      |> fill_in("Name", with: "Sample With Tracks")
+      |> fill_in("Year Released", with: 2021)
+      |> click_link("Add Track")
+      |> click_link("Add Track")
+      |> click_link("Add Track")
+      |> fill_in("tr[data-id=0] input", "Name", with: "First Track")
+      |> fill_in("tr[data-id=0] input", "Duration", with: "2:22")
+      |> fill_in("tr[data-id=1] input", "Name", with: "Second Track")
+      |> fill_in("tr[data-id=1] input", "Duration", with: "3:33")
+      |> fill_in("tr[data-id=2] input", "Name", with: "Third Track")
+      |> fill_in("tr[data-id=2] input", "Duration", with: "4:44")
+      |> click_link("tr[data-id=1] a", "Delete")
+      |> click_button("Save")
+      |> assert_has(flash(:info), text: "Album saved successfully")
 
-      # album = get_by_name!(Tunez.Music.Album, "Sample With Tracks", load: [:tracks])
-      # assert ["First Track", "Third Track"] == Enum.map(album.tracks, & &1.name)
+      album = get_by_name!(Tunez.Music.Album, "Sample With Tracks", load: [:tracks])
+      assert ["First Track", "Third Track"] == Enum.map(album.tracks, & &1.name)
     end
 
     test "fails when invalid details are entered", %{conn: conn} do
