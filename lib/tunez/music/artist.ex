@@ -125,6 +125,12 @@ defmodule Tunez.Music.Artist do
     belongs_to :updated_by, Tunez.Accounts.User
   end
 
+  calculations do
+    calculate :followed_by_me,
+              :boolean,
+              expr(exists(follower_relationships, follower_id == ^actor(:id)))
+  end
+
   aggregates do
     count :album_count, :albums do
       public? true

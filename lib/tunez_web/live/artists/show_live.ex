@@ -10,7 +10,7 @@ defmodule TunezWeb.Artists.ShowLive do
   def handle_params(%{"id" => artist_id}, _url, socket) do
     artist =
       Tunez.Music.get_artist_by_id!(artist_id,
-        load: [albums: [:duration, :tracks]],
+        load: [:followed_by_me, albums: [:duration, :tracks]],
         actor: socket.assigns.current_user
       )
 
@@ -28,6 +28,10 @@ defmodule TunezWeb.Artists.ShowLive do
       <.header>
         <.h1>
           {@artist.name}
+          <.follow_toggle
+            :if={Tunez.Music.can_follow_artist?(@current_user, @artist)}
+            on={@artist.followed_by_me}
+          />
         </.h1>
         <:subtitle :if={@artist.previous_names != []}>
           formerly known as: {Enum.join(@artist.previous_names, ", ")}
@@ -196,10 +200,32 @@ defmodule TunezWeb.Artists.ShowLive do
   end
 
   def handle_event("follow", _params, socket) do
+    socket =
+      case Tunez.Music.follow_artist(socket.assigns.artist, actor: socket.assigns.current_user) do
+        {:ok, _} ->
+          update(socket, :artist, fn artist ->
+            %{artist | followed_by_me: true}
+          end)
+
+        {:error, _} ->
+          put_flash(socket, :error, "Could not follow artist")
+      end
+
     {:noreply, socket}
   end
 
   def handle_event("unfollow", _params, socket) do
+    socket =
+      case Tunez.Music.unfollow_artist(socket.assigns.artist, actor: socket.assigns.current_user) do
+        :ok ->
+          update(socket, :artist, fn artist ->
+            %{artist | followed_by_me: false}
+          end)
+
+        {:error, _} ->
+          put_flash(socket, :error, "Could not unfollow artist")
+      end
+
     {:noreply, socket}
   end
 end
