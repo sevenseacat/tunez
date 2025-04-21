@@ -94,8 +94,8 @@ defmodule TunezWeb.Albums.FormLive do
               <.input field={track_form[:name]} />
             </td>
             <td class="px-3 w-36">
-              <label for={track_form[:duration_seconds].id} class="hidden">Duration</label>
-              <.input field={track_form[:duration_seconds]} />
+              <label for={track_form[:duration].id} class="hidden">Duration</label>
+              <.input field={track_form[:duration]} />
             </td>
             <td class="w-12">
               <.button_link
