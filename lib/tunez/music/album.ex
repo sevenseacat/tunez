@@ -99,6 +99,10 @@ defmodule Tunez.Music.Album do
       allow_nil? false
     end
 
+    has_many :tracks, Tunez.Music.Track do
+      sort order: :asc
+    end
+
     belongs_to :created_by, Tunez.Accounts.User
     belongs_to :updated_by, Tunez.Accounts.User
   end
