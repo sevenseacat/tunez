@@ -43,5 +43,7 @@ defmodule Tunez.Accounts do
       define :set_user_role, action: :set_role, args: [:role]
       define :get_user_by_id, action: :read, get_by: [:id]
     end
+
+    resource Tunez.Accounts.Notification
   end
 end
