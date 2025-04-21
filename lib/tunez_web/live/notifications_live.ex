@@ -5,6 +5,12 @@ defmodule TunezWeb.NotificationsLive do
 
   def mount(_params, _session, socket) do
     notifications = Tunez.Accounts.notifications_for_user!(actor: socket.assigns.current_user)
+
+    if connected?(socket) do
+      "notifications:#{socket.assigns.current_user.id}"
+      |> TunezWeb.Endpoint.subscribe()
+    end
+
     {:ok, assign(socket, notifications: notifications)}
   end
 
@@ -58,12 +64,17 @@ defmodule TunezWeb.NotificationsLive do
     """
   end
 
+  def handle_info(%{topic: "notifications:" <> _}, socket) do
+    notifications = Tunez.Accounts.notifications_for_user!(actor: socket.assigns.current_user)
+
+    {:noreply, assign(socket, notifications: notifications)}
+  end
+
   def handle_event("dismiss-notification", %{"id" => id}, socket) do
     notification = Enum.find(socket.assigns.notifications, &(&1.id == id))
 
     Tunez.Accounts.dismiss_notification(notification, actor: socket.assigns.current_user)
 
-    notifications = Enum.reject(socket.assigns.notifications, &(&1.id == id))
-    {:noreply, assign(socket, notifications: notifications)}
+    {:noreply, socket}
   end
 end

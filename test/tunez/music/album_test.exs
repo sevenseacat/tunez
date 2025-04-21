@@ -49,33 +49,31 @@ defmodule TunezWeb.Music.AlbumTest do
   end
 
   describe "Tunez.Music.destroy_album/1-2" do
-    @tag skip: "can be enabled during chapter 10"
     test "deletes any notifications about the album" do
-      # editor = generate(user(role: :editor))
-      # album = generate(album(actor: editor))
-      # %{id: to_stay_id} = generate(notification())
-      # _to_go = generate(notification(album_id: album.id))
+      editor = generate(user(role: :editor))
+      album = generate(album(actor: editor))
+      %{id: to_stay_id} = generate(notification())
+      _to_go = generate(notification(album_id: album.id))
 
-      # Music.destroy_album!(album, actor: editor)
+      Music.destroy_album!(album, actor: editor)
 
-      # notifications = Ash.read!(Tunez.Accounts.Notification, authorize?: false)
+      notifications = Ash.read!(Tunez.Accounts.Notification, authorize?: false)
 
-      # assert length(notifications) == 1
-      # assert Enum.map(notifications, & &1.id) == [to_stay_id]
+      assert length(notifications) == 1
+      assert Enum.map(notifications, & &1.id) == [to_stay_id]
     end
 
-    @tag skip: "can be enabled during chapter 10"
     test "sends pubsub notifications about the notification deletion" do
-      # follower = generate(user())
-      # album = generate(album())
-      # %{id: notification_id} = generate(notification(album_id: album.id, user_id: follower.id))
-      # TunezWeb.Endpoint.subscribe("notifications:#{follower.id}")
+      follower = generate(user())
+      album = generate(album())
+      %{id: notification_id} = generate(notification(album_id: album.id, user_id: follower.id))
+      TunezWeb.Endpoint.subscribe("notifications:#{follower.id}")
 
-      # Music.destroy_album!(album, authorize?: false)
+      Music.destroy_album!(album, authorize?: false)
 
-      # assert_received %Phoenix.Socket.Broadcast{
-      #   payload: %{id: ^notification_id}
-      # }
+      assert_received %Phoenix.Socket.Broadcast{
+        payload: %{id: ^notification_id}
+      }
     end
   end
 
