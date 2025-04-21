@@ -3,11 +3,23 @@ defmodule Tunez.Music.Album do
     otp_app: :tunez,
     domain: Tunez.Music,
     data_layer: AshPostgres.DataLayer,
-    extensions: [AshGraphql.Resource, AshJsonApi.Resource],
+    extensions: [AshOban, AshGraphql.Resource, AshJsonApi.Resource],
     authorizers: [Ash.Policy.Authorizer]
 
   graphql do
     type :album
+  end
+
+  oban do
+    triggers do
+      trigger :send_new_album_notifications do
+        action :send_new_album_notifications
+        queue :default
+        scheduler_cron false
+        worker_module_name Tunez.Music.Album.AshOban.Worker.SendNewAlbumNotifications
+        scheduler_module_name Tunez.Music.Album.AshOban.Scheduler.SendNewAlbumNotifications
+      end
+    end
   end
 
   json_api do
@@ -45,9 +57,17 @@ defmodule Tunez.Music.Album do
       argument :tracks, {:array, :map}
       change manage_relationship(:tracks, type: :direct_control, order_is_key: :order)
     end
+
+    update :send_new_album_notifications do
+      change Tunez.Accounts.Changes.SendNewAlbumNotifications
+    end
   end
 
   policies do
+    bypass AshOban.Checks.AshObanInteraction do
+      authorize_if always()
+    end
+
     bypass actor_attribute_equals(:role, :admin) do
       authorize_if always()
     end
@@ -66,7 +86,7 @@ defmodule Tunez.Music.Album do
   end
 
   changes do
-    change Tunez.Accounts.Changes.SendNewAlbumNotifications, on: [:create]
+    change run_oban_trigger(:send_new_album_notifications), on: [:create]
 
     change relate_actor(:created_by, allow_nil?: true), on: [:create]
     change relate_actor(:updated_by, allow_nil?: true)

@@ -11,12 +11,17 @@ defmodule Tunez.Application do
       TunezWeb.Telemetry,
       Tunez.Repo,
       {DNSCluster, query: Application.get_env(:tunez, :dns_cluster_query) || :ignore},
-      {Phoenix.PubSub, name: Tunez.PubSub},
+      {Oban,
+       AshOban.config(
+         Application.fetch_env!(:tunez, :ash_domains),
+         Application.fetch_env!(:tunez, Oban)
+       )},
       # Start the Finch HTTP client for sending emails
-      {Finch, name: Tunez.Finch},
       # Start a worker by calling: Tunez.Worker.start_link(arg)
       # {Tunez.Worker, arg},
       # Start to serve requests, typically the last entry
+      {Phoenix.PubSub, name: Tunez.PubSub},
+      {Finch, name: Tunez.Finch},
       TunezWeb.Endpoint,
       {Absinthe.Subscription, TunezWeb.Endpoint},
       AshGraphql.Subscription.Batcher,
