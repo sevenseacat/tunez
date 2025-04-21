@@ -14,4 +14,9 @@ defmodule Tunez.Accounts.Changes.SendNewAlbumNotifications do
       {:ok, album}
     end)
   end
+
+  @impl true
+  def atomic(changeset, opts, context) do
+    {:ok, change(changeset, opts, context)}
+  end
 end
