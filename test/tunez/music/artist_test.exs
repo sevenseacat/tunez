@@ -130,18 +130,17 @@ defmodule Tunez.Music.ArtistTest do
   end
 
   describe "Tunez.Music.destroy_artist/2" do
-    @tag skip: "can be enabled during chapter 10"
     test "deletes any associated albums when the artist is deleted" do
-      # artist = generate(artist())
-      # album = generate(album(artist_id: artist.id, name: "to be deleted"))
+      artist = generate(artist())
+      album = generate(album(artist_id: artist.id, name: "to be deleted"))
 
-      # # This should be deleted too, without error
-      # notification = generate(notification(album_id: album.id))
+      # This should be deleted too, without error
+      notification = generate(notification(album_id: album.id))
 
-      # Music.destroy_artist!(artist, authorize?: false)
+      Music.destroy_artist!(artist, authorize?: false)
 
-      # refute get_by_name(Tunez.Music.Album, "to be deleted")
-      # assert match?({:error, _}, Ash.get(Tunez.Accounts.Notification, notification.id))
+      refute get_by_name(Tunez.Music.Album, "to be deleted")
+      assert match?({:error, _}, Ash.get(Tunez.Accounts.Notification, notification.id))
     end
   end
 

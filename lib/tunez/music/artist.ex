@@ -38,8 +38,14 @@ defmodule Tunez.Music.Artist do
   end
 
   actions do
-    defaults [:create, :read, :destroy]
+    defaults [:create, :read]
     default_accept [:name, :biography]
+
+    destroy :destroy do
+      primary? true
+
+      change cascade_destroy(:albums, return_notifications?: true, after_action?: false)
+    end
 
     read :search do
       description "List Artists, optionally filtering by name."

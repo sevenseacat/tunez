@@ -115,16 +115,15 @@ defmodule Tunez.Generator do
   - `:album_id` - Specify the album ID for the notification
   """
   def notification(opts \\ []) do
-    raise "Uncomment the `notification` generator content in `test/support/generator.ex` (and remove this line)"
-    # user_id = opts[:user_id] || once(:default_user_id, fn -> generate(user()).id end)
-    # album_id = opts[:album_id] || once(:default_album_id, fn -> generate(album()).id end)
+    user_id = opts[:user_id] || once(:default_user_id, fn -> generate(user()).id end)
+    album_id = opts[:album_id] || once(:default_album_id, fn -> generate(album()).id end)
 
-    # changeset_generator(
-    #   Tunez.Accounts.Notification,
-    #   :create,
-    #   overrides: %{user_id: user_id, album_id: album_id},
-    #   authorize?: false
-    # )
+    changeset_generator(
+      Tunez.Accounts.Notification,
+      :create,
+      overrides: %{user_id: user_id, album_id: album_id},
+      authorize?: false
+    )
   end
 
   @doc """
