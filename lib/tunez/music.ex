@@ -95,6 +95,8 @@ defmodule Tunez.Music do
           transform to: :artist_id, using: & &1.id
         end
       end
+
+      define :followers_for_artist, action: :for_artist, args: [:artist_id]
     end
   end
 end
