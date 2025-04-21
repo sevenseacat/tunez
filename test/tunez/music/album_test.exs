@@ -1,6 +1,6 @@
 defmodule TunezWeb.Music.AlbumTest do
   use Tunez.DataCase, async: true
-  # use Oban.Testing, repo: Tunez.Repo
+  use Oban.Testing, repo: Tunez.Repo
 
   alias Tunez.Accounts.Notification, warn: false
   alias Tunez.Music, warn: false
@@ -20,19 +20,17 @@ defmodule TunezWeb.Music.AlbumTest do
       assert album.updated_by_id == actor.id
     end
 
-    @tag skip: "can be enabled during chapter 10. Also need to uncomment `use Oban.Testing`
-      at the top of this module"
     test "queues a job to send notifications" do
-      # actor = generate(user(role: :admin))
-      # artist = generate(artist())
+      actor = generate(user(role: :admin))
+      artist = generate(artist())
 
-      # album =
-      #   Music.create_album!(
-      #     %{name: "New Album", artist_id: artist.id, year_released: 2024},
-      #     actor: actor
-      #   )
+      album =
+        Music.create_album!(
+          %{name: "New Album", artist_id: artist.id, year_released: 2024},
+          actor: actor
+        )
 
-      # assert_enqueued(args: %{primary_key: %{id: album.id}})
+      assert_enqueued(args: %{primary_key: %{id: album.id}})
     end
   end
 
@@ -78,33 +76,32 @@ defmodule TunezWeb.Music.AlbumTest do
   end
 
   describe "send_new_album_notifications" do
-    @tag skip: "can be enabled during chapter 10"
     test "creates and sends notifications for followers of the album's artist" do
-      # artist = generate(artist())
-      # [follower, _nonfollower] = generate_many(user(), 2)
-      # TunezWeb.Endpoint.subscribe("notifications:#{follower.id}")
+      artist = generate(artist())
+      [follower, _nonfollower] = generate_many(user(), 2)
+      TunezWeb.Endpoint.subscribe("notifications:#{follower.id}")
 
-      # Music.follow_artist!(artist, actor: follower)
+      Music.follow_artist!(artist, actor: follower)
 
-      # %{id: album_id} = album = generate(album(artist_id: artist.id))
-      # %{id: follower_id} = follower
+      %{id: album_id} = album = generate(album(artist_id: artist.id))
+      %{id: follower_id} = follower
 
-      # # Mimic running the action as an Oban job
-      # album
-      # |> Ash.Changeset.for_update(:send_new_album_notifications)
-      # |> Ash.Changeset.put_context(:private, %{ash_oban?: true})
-      # |> Ash.update!()
+      # Mimic running the action as an Oban job
+      album
+      |> Ash.Changeset.for_update(:send_new_album_notifications)
+      |> Ash.Changeset.put_context(:private, %{ash_oban?: true})
+      |> Ash.update!()
 
-      # notifications = Ash.read!(Notification, authorize?: false)
-      # assert length(notifications) == 1
-      # notification = hd(notifications)
+      notifications = Ash.read!(Notification, authorize?: false)
+      assert length(notifications) == 1
+      notification = hd(notifications)
 
-      # assert notification.user_id == follower.id
-      # assert notification.album_id == album.id
+      assert notification.user_id == follower.id
+      assert notification.album_id == album.id
 
-      # assert_received(%Phoenix.Socket.Broadcast{
-      #   payload: %{album_id: ^album_id, user_id: ^follower_id}
-      # })
+      assert_received(%Phoenix.Socket.Broadcast{
+        payload: %{album_id: ^album_id, user_id: ^follower_id}
+      })
     end
   end
 
