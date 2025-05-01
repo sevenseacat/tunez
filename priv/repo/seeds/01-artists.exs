@@ -13,7 +13,7 @@ names = Enum.map(data, & &1.name)
 if Ash.Resource.Info.action(Tunez.Music.Artist, :destroy) do
   Tunez.Music.Artist
   |> Ash.Query.filter(name in ^names)
-  |> Ash.bulk_destroy!(:destroy, %{}, authorize?: false)
+  |> Ash.bulk_destroy!(:destroy, %{}, strategy: :stream, authorize?: false)
 else
   from(a in Tunez.Music.Artist, where: a.name in ^names)
   |> Tunez.Repo.delete_all()
