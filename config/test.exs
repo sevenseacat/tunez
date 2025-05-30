@@ -36,7 +36,4 @@ config :phoenix, :plug_init_mode, :runtime
 config :phoenix_live_view,
   enable_expensive_runtime_checks: true
 
-# Speed up tests by making password generation less secure
-config :bcrypt_elixir, log_rounds: 1
-
 config :phoenix_test, :endpoint, TunezWeb.Endpoint
