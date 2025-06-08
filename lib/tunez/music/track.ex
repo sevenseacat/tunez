@@ -82,6 +82,14 @@ defmodule Tunez.Music.Track do
     belongs_to :album, Tunez.Music.Album do
       allow_nil? false
     end
+
+    has_many :track_favorites, Tunez.Music.TrackFavorite
+
+    many_to_many :favorited_by_users, Tunez.Accounts.User do
+      join_relationship :track_favorites
+      source_attribute_on_join_resource :track_id
+      destination_attribute_on_join_resource :user_id
+    end
   end
 
   calculations do
@@ -90,6 +98,12 @@ defmodule Tunez.Music.Track do
     end
 
     calculate :duration, :string, Tunez.Music.Calculations.SecondsToMinutes do
+      public? true
+    end
+
+    calculate :favorited_by_me,
+              :boolean,
+              expr(exists(track_favorites, user_id == ^actor(:id))) do
       public? true
     end
   end

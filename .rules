@@ -1,0 +1,155 @@
+# Tunez Application Architecture & Patterns
+
+## Overview
+
+Tunez is a music catalog application built with the Ash Framework, demonstrating a comprehensive implementation of modern Elixir/Phoenix patterns. It serves as a reference implementation for building robust, API-first applications with multiple interfaces (LiveView, GraphQL, JSON:API).
+
+## Application Structure
+
+### Core Domains
+
+The application is organized around two primary Ash domains:
+
+1. **`Tunez.Accounts`** - User management, authentication, and notifications
+2. **`Tunez.Music`** - Music catalog with artists, albums, and tracks
+
+### Domain Resources
+
+#### Tunez.Accounts Domain
+- **`User`** - Core user entity with role-based authorization (admin, editor, user)
+- **`Token`** - Authentication token management for sessions
+- **`Notification`** - User notifications for new album releases
+
+#### Tunez.Music Domain
+- **`Artist`** - Musicians/bands with biography, name history tracking
+- **`Album`** - Music releases with cover art, year, and track listings
+- **`Track`** - Individual songs with duration and ordering
+- **`ArtistFollower`** - User-artist following relationships
+
+### Key Architectural Patterns
+
+#### 1. Multi-Interface API Design
+- **LiveView UI** - Interactive web interface for browsing and management
+- **GraphQL API** - Flexible querying via Absinthe with subscriptions
+- **JSON:API** - RESTful API following JSON:API specification
+- **Unified Authorization** - Single policy system across all interfaces
+
+#### 2. Role-Based Authorization
+```elixir
+# Three-tier permission system
+:admin    # Full CRUD on all resources
+:editor   # Can create/update content, manage own albums
+:user     # Read-only access, can follow artists
+```
+
+#### 3. Authentication Strategies
+- **Password Authentication** - Traditional email/password with reset
+- **Magic Link** - Passwordless email-based authentication
+- **Session Management** - JWT tokens with refresh capabilities
+- **Email Confirmation** - Required verification for new accounts
+
+#### 4. Data Relationships & Aggregates
+- **Hierarchical Data** - Artists → Albums → Tracks
+- **Social Features** - User following of artists with notifications
+- **Calculated Fields** - Real-time aggregates (follower counts, album counts)
+- **Soft References** - Audit trails with created_by/updated_by tracking
+
+#### 5. Background Processing
+- **Oban Integration** - Reliable job processing via `ash_oban`
+- **Event Triggers** - Automatic notification sending on new albums
+- **Scheduled Tasks** - Cleanup and maintenance operations
+
+#### 6. Database Design
+- **PostgreSQL** - Primary data store with advanced features
+- **UUID Primary Keys** - Distributed-friendly identifiers
+- **Timestamps** - Automatic created_at/updated_at tracking
+- **Full-Text Search** - GIN indexes for artist name searching
+- **Referential Integrity** - Proper foreign key constraints with cascade deletes
+
+#### 7. Testing Patterns
+- **Factory-Based** - Test data generation with `test/support/generator.ex`
+- **Policy Testing** - Authorization verification across user roles
+- **Integration Tests** - Full-stack testing of LiveView flows
+- **API Testing** - GraphQL and JSON:API endpoint validation
+
+#### 8. File Organization
+```
+lib/
+├── tunez/                    # Core business logic
+│   ├── accounts/             # User domain
+│   │   ├── user.ex          # User resource
+│   │   ├── role.ex          # Role enum
+│   │   └── changes/         # Custom changes
+│   ├── music/               # Music domain
+│   │   ├── artist.ex        # Artist resource
+│   │   ├── album.ex         # Album resource
+│   │   ├── track.ex         # Track resource
+│   │   ├── calculations/    # Custom calculations
+│   │   └── changes/         # Custom changes
+│   ├── accounts.ex          # Accounts domain
+│   ├── music.ex             # Music domain
+│   └── application.ex       # OTP application
+├── tunez_web/               # Web interfaces
+│   ├── live/                # LiveView pages
+│   ├── components/          # Reusable UI components
+│   ├── controllers/         # Traditional controllers
+│   ├── graphql_schema.ex    # GraphQL schema
+│   └── ash_json_api_router.ex # JSON:API router
+```
+
+#### 9. Asset Management
+- **Static Assets** - Album cover images in `priv/static/images/albums/`
+- **CSS Framework** - Tailwind CSS with custom theme
+- **JavaScript** - Minimal vanilla JS with Phoenix LiveView
+- **Build Pipeline** - esbuild and Tailwind compilation
+
+#### 10. Development Workflow
+- **Igniter Integration** - Code generation and migration assistance
+- **Mix Tasks** - Custom setup, seeding, and maintenance commands
+- **Live Reloading** - Hot code reloading in development
+- **Database Snapshots** - Resource snapshot management for migrations
+
+### Common Patterns
+
+1. **Resource Definition** - All entities inherit from `Ash.Resource` with consistent structure
+2. **Policy Authorization** - Declarative authorization rules in each resource
+3. **Action Composition** - Reusable actions with argument validation
+4. **Change Tracking** - Automatic audit trails and history preservation
+5. **Relationship Loading** - Eager loading patterns for performance
+6. **Validation Layers** - Both Ash validations and custom business rules
+7. **Error Handling** - Consistent error propagation across all interfaces
+
+<-- usage-rules-start -->
+<-- ash_json_api-start -->
+## ash_json_api usage
+[ash_json_api usage rules](deps/ash_json_api/usage-rules.md)
+<-- ash_json_api-end -->
+<-- ash_postgres-start -->
+## ash_postgres usage
+[ash_postgres usage rules](deps/ash_postgres/usage-rules.md)
+<-- ash_postgres-end -->
+<-- ash_phoenix-start -->
+## ash_phoenix usage
+[ash_phoenix usage rules](deps/ash_phoenix/usage-rules.md)
+<-- ash_phoenix-end -->
+<-- ash_graphql-start -->
+## ash_graphql usage
+[ash_graphql usage rules](deps/ash_graphql/usage-rules.md)
+<-- ash_graphql-end -->
+<-- igniter-start -->
+## igniter usage
+[igniter usage rules](deps/igniter/usage-rules.md)
+<-- igniter-end -->
+<-- ash_oban-start -->
+## ash_oban usage
+[ash_oban usage rules](deps/ash_oban/usage-rules.md)
+<-- ash_oban-end -->
+<-- ash_ai-start -->
+## ash_ai usage
+[ash_ai usage rules](deps/ash_ai/usage-rules.md)
+<-- ash_ai-end -->
+<-- ash-start -->
+## ash usage
+[ash usage rules](deps/ash/usage-rules.md)
+<-- ash-end -->
+<-- usage-rules-end -->

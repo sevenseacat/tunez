@@ -46,6 +46,7 @@ defmodule Tunez.Accounts.User do
       magic_link do
         identity_field :email
         registration_enabled? true
+        require_interaction? true
 
         sender Tunez.Accounts.User.Senders.SendMagicLinkEmail
       end
@@ -316,6 +317,14 @@ defmodule Tunez.Accounts.User do
     many_to_many :followed_artists, Tunez.Music.Artist do
       join_relationship :follower_relationships
       source_attribute_on_join_resource :follower_id
+    end
+
+    has_many :track_favorites, Tunez.Music.TrackFavorite
+
+    many_to_many :favorited_tracks, Tunez.Music.Track do
+      join_relationship :track_favorites
+      source_attribute_on_join_resource :user_id
+      destination_attribute_on_join_resource :track_id
     end
   end
 

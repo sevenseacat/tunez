@@ -74,6 +74,28 @@ defmodule Tunez.Music do
 
     resource Tunez.Music.Track
 
+    resource Tunez.Music.TrackFavorite do
+      define :favorite_track do
+        action :create
+        args [:track]
+
+        custom_input :track, :struct do
+          constraints instance_of: Tunez.Music.Track
+          transform to: :track_id, using: & &1.id
+        end
+      end
+
+      define :unfavorite_track do
+        action :unfavorite_gracefully
+        args [:track]
+
+        custom_input :track, :struct do
+          constraints instance_of: Tunez.Music.Track
+          transform to: :track_id, using: & &1.id
+        end
+      end
+    end
+
     resource Tunez.Music.ArtistFollower do
       define :follow_artist do
         action :create

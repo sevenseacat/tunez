@@ -10,7 +10,7 @@ defmodule TunezWeb.Artists.ShowLive do
   def handle_params(%{"id" => artist_id}, _url, socket) do
     artist =
       Tunez.Music.get_artist_by_id!(artist_id,
-        load: [:followed_by_me, albums: [:duration, :tracks]],
+        load: [:followed_by_me, albums: [:duration, tracks: [:favorited_by_me]]],
         actor: socket.assigns.current_user
       )
 
@@ -101,7 +101,7 @@ defmodule TunezWeb.Artists.ShowLive do
             </.button_link>
           </:action>
         </.header>
-        <.track_details tracks={@album.tracks} />
+        <.track_details tracks={@album.tracks} current_user={@current_user} />
       </div>
     </div>
     """
@@ -114,7 +114,21 @@ defmodule TunezWeb.Artists.ShowLive do
         <th class="whitespace-nowrap w-1 p-3">
           {String.pad_leading("#{track.number}", 2, "0")}.
         </th>
-        <td class="p-3">{track.name}</td>
+        <td class="p-3 flex items-center gap-2">
+          <span
+            :if={@current_user}
+            phx-click="toggle-favorite"
+            phx-value-track-id={track.id}
+            role="button"
+            class="cursor-pointer hover:scale-110 transition-transform"
+          >
+            <.icon
+              name={if track.favorited_by_me, do: "hero-star-solid", else: "hero-star"}
+              class="w-4 h-4 bg-yellow-400"
+            />
+          </span>
+          {track.name}
+        </td>
         <td class="whitespace-nowrap w-1 text-right p-2">{track.duration}</td>
       </tr>
     </table>
@@ -227,5 +241,68 @@ defmodule TunezWeb.Artists.ShowLive do
       end
 
     {:noreply, socket}
+  end
+
+  def handle_event("toggle-favorite", %{"track-id" => track_id}, socket) do
+    # Only allow authenticated users to favorite tracks
+    if socket.assigns.current_user do
+      # Find the track and album containing it
+      {album_index, track_index, track} = find_track_in_artist(socket.assigns.artist, track_id)
+
+      socket =
+        if track.favorited_by_me do
+          # Unfavorite the track
+          case Tunez.Music.unfavorite_track(track, actor: socket.assigns.current_user) do
+            :ok ->
+              update_track_favorite_status(socket, album_index, track_index, false)
+
+            {:error, _} ->
+              put_flash(socket, :error, "Could not unfavorite track")
+          end
+        else
+          # Favorite the track
+          case Tunez.Music.favorite_track(track, actor: socket.assigns.current_user) do
+            {:ok, _} ->
+              update_track_favorite_status(socket, album_index, track_index, true)
+
+            {:error, _} ->
+              put_flash(socket, :error, "Could not favorite track")
+          end
+        end
+
+      {:noreply, socket}
+    else
+      {:noreply, put_flash(socket, :error, "You must be logged in to favorite tracks")}
+    end
+  end
+
+  defp find_track_in_artist(artist, track_id) do
+    Enum.with_index(artist.albums)
+    |> Enum.find_value(fn {album, album_index} ->
+      case Enum.find_index(album.tracks, &(&1.id == track_id)) do
+        nil ->
+          nil
+
+        track_index ->
+          track = Enum.at(album.tracks, track_index)
+          {album_index, track_index, track}
+      end
+    end)
+  end
+
+  defp update_track_favorite_status(socket, album_index, track_index, favorited?) do
+    update(socket, :artist, fn artist ->
+      albums =
+        List.update_at(artist.albums, album_index, fn album ->
+          tracks =
+            List.update_at(album.tracks, track_index, fn track ->
+              %{track | favorited_by_me: favorited?}
+            end)
+
+          %{album | tracks: tracks}
+        end)
+
+      %{artist | albums: albums}
+    end)
   end
 end

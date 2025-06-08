@@ -138,6 +138,7 @@ defmodule Tunez.Generator do
   def track(opts \\ []) do
     actor = opts[:actor] || once(:default_actor, fn -> generate(user(role: :admin)) end)
     album_id = opts[:album_id] || once(:default_album_id, fn -> generate(album()).id end)
+    authorize? = Keyword.get(opts, :authorize?, false)
 
     if opts[:seed?] do
       seed_generator(
@@ -148,7 +149,8 @@ defmodule Tunez.Generator do
           duration_seconds: Enum.at(Ash.Type.generator(:integer, min: 1, max: 1000), 0)
         },
         actor: actor,
-        overrides: opts
+        overrides: opts,
+        authorize?: authorize?
       )
     else
       changeset_generator(
@@ -160,7 +162,8 @@ defmodule Tunez.Generator do
           duration: duration()
         ],
         overrides: opts,
-        actor: actor
+        actor: actor,
+        authorize?: authorize?
       )
     end
   end
@@ -188,6 +191,27 @@ defmodule Tunez.Generator do
         role = opts[:role] || :user
         Tunez.Accounts.set_user_role!(user, role, authorize?: false)
       end
+    )
+  end
+
+  @doc """
+  Generates track favorite changesets with the `:create` action.
+
+  ## Extra Options
+
+  - `:user_id` - Specify the user ID for the favorite
+  - `:track_id` - Specify the track ID for the favorite
+  """
+  def track_favorite(opts \\ []) do
+    user_id = opts[:user_id] || once(:default_user_id, fn -> generate(user()).id end)
+    track_id = opts[:track_id] || once(:default_track_id, fn -> generate(track()).id end)
+
+    changeset_generator(
+      Tunez.Music.TrackFavorite,
+      :create,
+      overrides: %{track_id: track_id},
+      actor: %{id: user_id},
+      authorize?: false
     )
   end
 
