@@ -5,6 +5,7 @@
 @source "../css";
 @source "../js";
 @source "../../lib/tunez_web";
+@source "../../deps/ash_authentication_phoenix";
 
 @plugin "@tailwindcss/forms";
 
@@ -24,7 +25,7 @@
 
 /* Make LiveView wrapper divs transparent for layout */
 [data-phx-root-id] {
-  display: contents
+  display: contents;
 }
 
 /* This file is for your main application CSS */
