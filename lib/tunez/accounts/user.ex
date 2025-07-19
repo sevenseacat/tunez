@@ -4,7 +4,7 @@ defmodule Tunez.Accounts.User do
     domain: Tunez.Accounts,
     data_layer: AshPostgres.DataLayer,
     authorizers: [Ash.Policy.Authorizer],
-    extensions: [AshJsonApi.Resource, AshAuthentication]
+    extensions: [AshGraphql.Resource, AshJsonApi.Resource, AshAuthentication]
 
   authentication do
     add_ons do
@@ -52,6 +52,10 @@ defmodule Tunez.Accounts.User do
         sender Tunez.Accounts.User.Senders.SendMagicLinkEmail
       end
     end
+  end
+
+  graphql do
+    type :user
   end
 
   json_api do
@@ -273,8 +277,8 @@ defmodule Tunez.Accounts.User do
       authorize_if always()
     end
 
-    policy always() do
-      forbid_if always()
+    policy action([:register_with_password, :sign_in_with_password]) do
+      authorize_if always()
     end
   end
 
