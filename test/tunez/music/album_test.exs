@@ -173,7 +173,7 @@ defmodule TunezWeb.Music.AlbumTest do
 
   describe "validations" do
     @tag :skip
-    test "year_released must be between 1950 and now" do
+    test "year_released must be between 1950 and next year" do
       # admin = generate(user(role: :admin))
       # artist = generate(artist())
 

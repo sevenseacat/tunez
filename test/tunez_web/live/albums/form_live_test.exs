@@ -50,12 +50,12 @@ defmodule TunezWeb.Albums.FormLiveTest do
       # |> fill_in("tr[data-id=1] input", "Duration", with: "3:33")
       # |> fill_in("tr[data-id=2] input", "Name", with: "Third Track")
       # |> fill_in("tr[data-id=2] input", "Duration", with: "4:44")
-      # |> click_link("tr[data-id=1] a", "Delete")
+      # |> click_link("tr[data-id=2] a", "Delete")
       # |> click_button("Save")
       # |> assert_has(flash(:info), text: "Album saved successfully")
 
       # album = get_by_name!(Tunez.Music.Album, "Sample With Tracks", load: [:tracks])
-      # assert ["First Track", "Third Track"] == Enum.map(album.tracks, & &1.name)
+      # assert ["First Track", "Second Track"] == Enum.map(album.tracks, & &1.name)
     end
 
     @tag skip: "Also need to change `_conn` to `conn` below"
