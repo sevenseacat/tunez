@@ -65,5 +65,6 @@ defmodule Tunez.Music do
     end
 
     resource Tunez.Music.Track
+    resource Tunez.Music.ArtistFollower
   end
 end
