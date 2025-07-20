@@ -56,10 +56,8 @@ defmodule Tunez.Music.Artist do
     end
 
     update :update do
-      require_atomic? false
       accept [:name, :biography]
-
-      change Tunez.Music.Changes.UpdatePreviousNames, where: [changing(:name)]
+      change Tunez.Music.Changes.UpdatePreviousNames
     end
 
     destroy :destroy do
