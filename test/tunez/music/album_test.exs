@@ -19,32 +19,30 @@ defmodule TunezWeb.Music.AlbumTest do
       assert album.updated_by_id == actor.id
     end
 
-    @tag skip: "can be enabled during chapter 10"
     test "creates and sends notifications for followers of the album's artist" do
-      # artist = generate(artist())
-      # actor = generate(user(role: :admin))
-      # [%{id: follower_id} = follower, _nonfollower] = generate_many(user(), 2)
-      # TunezWeb.Endpoint.subscribe("notifications:#{follower_id}")
+      artist = generate(artist())
+      actor = generate(user(role: :admin))
+      [%{id: follower_id} = follower, _nonfollower] = generate_many(user(), 2)
+      TunezWeb.Endpoint.subscribe("notifications:#{follower_id}")
 
-      # Music.follow_artist!(artist, actor: follower)
+      Music.follow_artist!(artist, actor: follower)
 
-      # %{id: album_id} =
-      #   Music.create_album!(
-      #     %{name: "New Album", artist_id: artist.id, year_released: 2024},
-      #     actor: actor
-      #   )
-      #
+      %{id: album_id} =
+        Music.create_album!(
+          %{name: "New Album", artist_id: artist.id, year_released: 2024},
+          actor: actor
+        )
 
-      # notifications = Ash.read!(Notification, authorize?: false)
-      # assert length(notifications) == 1
-      # notification = hd(notifications)
+      notifications = Ash.read!(Notification, authorize?: false)
+      assert length(notifications) == 1
+      notification = hd(notifications)
 
-      # assert notification.user_id == follower_id
-      # assert notification.album_id == album_id
+      assert notification.user_id == follower_id
+      assert notification.album_id == album_id
 
-      # assert_received(%Phoenix.Socket.Broadcast{
-      #   payload: %{album_id: ^album_id, user_id: ^follower_id}
-      # })
+      assert_received(%Phoenix.Socket.Broadcast{
+        payload: %{album_id: ^album_id, user_id: ^follower_id}
+      })
     end
   end
 
@@ -61,33 +59,31 @@ defmodule TunezWeb.Music.AlbumTest do
   end
 
   describe "Tunez.Music.destroy_album/1-2" do
-    @tag skip: "can be enabled during chapter 10"
     test "deletes any notifications about the album" do
-      # editor = generate(user(role: :editor))
-      # album = generate(album(actor: editor))
-      # %{id: to_stay_id} = generate(notification())
-      # _to_go = generate(notification(album_id: album.id))
+      editor = generate(user(role: :editor))
+      album = generate(album(actor: editor))
+      %{id: to_stay_id} = generate(notification())
+      _to_go = generate(notification(album_id: album.id))
 
-      # Music.destroy_album!(album, actor: editor)
+      Music.destroy_album!(album, actor: editor)
 
-      # notifications = Ash.read!(Tunez.Accounts.Notification, authorize?: false)
+      notifications = Ash.read!(Tunez.Accounts.Notification, authorize?: false)
 
-      # assert length(notifications) == 1
-      # assert Enum.map(notifications, & &1.id) == [to_stay_id]
+      assert length(notifications) == 1
+      assert Enum.map(notifications, & &1.id) == [to_stay_id]
     end
 
-    @tag skip: "can be enabled during chapter 10"
     test "sends pubsub notifications about the notification deletion" do
-      # follower = generate(user())
-      # album = generate(album())
-      # %{id: notification_id} = generate(notification(album_id: album.id, user_id: follower.id))
-      # TunezWeb.Endpoint.subscribe("notifications:#{follower.id}")
+      follower = generate(user())
+      album = generate(album())
+      %{id: notification_id} = generate(notification(album_id: album.id, user_id: follower.id))
+      TunezWeb.Endpoint.subscribe("notifications:#{follower.id}")
 
-      # Music.destroy_album!(album, authorize?: false)
+      Music.destroy_album!(album, authorize?: false)
 
-      # assert_received %Phoenix.Socket.Broadcast{
-      #   payload: %{id: ^notification_id}
-      # }
+      assert_received %Phoenix.Socket.Broadcast{
+        payload: %{id: ^notification_id}
+      }
     end
   end
 
