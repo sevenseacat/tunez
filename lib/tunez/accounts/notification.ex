@@ -16,14 +16,29 @@ defmodule Tunez.Accounts.Notification do
   end
 
   actions do
+    defaults [:destroy]
+
     create :create do
       accept [:user_id, :album_id]
+    end
+
+    read :for_user do
+      prepare build(load: [album: [:artist]], sort: [inserted_at: :desc])
+      filter expr(user_id == ^actor(:id))
     end
   end
 
   policies do
     policy action(:create) do
       forbid_if always()
+    end
+
+    policy action(:for_user) do
+      authorize_if actor_present()
+    end
+
+    policy action(:destroy) do
+      authorize_if relates_to_actor_via(:user)
     end
   end
 
