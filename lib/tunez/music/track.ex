@@ -19,12 +19,17 @@ defmodule Tunez.Music.Track do
 
     create :create do
       primary? true
-      accept [:order, :name, :duration_seconds, :album_id]
+      accept [:order, :name, :album_id]
+      argument :duration, :string, allow_nil?: false
+      change Tunez.Music.Changes.MinutesToSeconds, only_when_valid?: true
     end
 
     update :update do
       primary? true
-      accept [:order, :name, :duration_seconds]
+      accept [:order, :name]
+      require_atomic? false
+      argument :duration, :string, allow_nil?: false
+      change Tunez.Music.Changes.MinutesToSeconds, only_when_valid?: true
     end
   end
 
@@ -36,7 +41,7 @@ defmodule Tunez.Music.Track do
   end
 
   preparations do
-    prepare build(load: [:number])
+    prepare build(load: [:number, :duration])
   end
 
   attributes do
@@ -67,5 +72,6 @@ defmodule Tunez.Music.Track do
 
   calculations do
     calculate :number, :integer, expr(order + 1)
+    calculate :duration, :string, Tunez.Music.Calculations.SecondsToMinutes
   end
 end
